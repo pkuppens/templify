@@ -2,7 +2,7 @@
 name = "templify"
 version = "0.1.0"
 description = "Templify simplifies advanced templating features."
-authors = ["Pieter Kuppens <pieter@example.com>"]
+authors = ["Pieter Kuppens <pieter.kuppens@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/pkuppens/templify"
@@ -14,8 +14,6 @@ python = "^3.12"
 jmespath = "^0.10.0"
 reportlab = "^4.1.0"
 pre-commit = "^4.2.0"
-
-[tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
 pytest-cov = "^4.1.0"
 black = "^23.7.0"
