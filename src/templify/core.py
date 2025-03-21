@@ -1,10 +1,10 @@
 """
 Core functionality for Templify
 """
-from typing import Any, Dict, Union
+from typing import Any
 
 
-def render_text(template: str, context: Dict[str, Any]) -> str:
+def render_text(template: str, context: dict[str, Any]) -> str:
     """
     Render a text template with the given context.
 
@@ -18,7 +18,7 @@ def render_text(template: str, context: Dict[str, Any]) -> str:
     raise NotImplementedError("render_text not implemented yet")
 
 
-def render_data(data: Union[Dict, list], context: Dict[str, Any]) -> Union[Dict, list]:
+def render_data(data: dict | list, context: dict[str, Any]) -> dict | list:
     """
     Render a data structure with placeholders recursively.
 
@@ -35,7 +35,7 @@ def render_data(data: Union[Dict, list], context: Dict[str, Any]) -> Union[Dict,
 def render_pdf_file(
     template_path: str,
     output_path: str,
-    context: Dict[str, Any],
+    context: dict[str, Any],
     overwrite: bool = False,
 ) -> None:
     """

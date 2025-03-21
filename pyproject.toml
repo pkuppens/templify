@@ -13,6 +13,7 @@ documentation = "https://pkuppens.github.io/templify"
 python = "^3.12"
 jmespath = "^0.10.0"
 reportlab = "^4.1.0"
+pre-commit = "^4.2.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"

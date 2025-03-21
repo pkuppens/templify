@@ -59,4 +59,4 @@ For PDF tests, a sample template is needed in `tests/fixtures/template.pdf`. Thi
 
 ## Continuous Integration
 
-Tests are automatically executed on GitHub Actions for every push and pull request. 
+Tests are automatically executed on GitHub Actions for every push and pull request.

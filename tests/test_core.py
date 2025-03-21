@@ -1,8 +1,7 @@
 """
 Tests for core functionality
 """
-import pytest
-from templify import render_text, render_data, render_pdf_file
+from templify import render_data, render_pdf_file, render_text
 
 
 def test_render_text():
@@ -36,8 +35,10 @@ def test_render_data():
 def test_render_data_with_jmespath():
     """Test data rendering with JMESPath expressions"""
     data = {
-        "summary": 'Top-selling product: {{ products | jmespath("max_by(@, &sales).name") }}',
-        "details": 'Total revenue: {{ products | jmespath("sum(@[].revenue)") }}',
+        "summary": 'Top-selling product: '
+                   '{{ products | jmespath("max_by(@, &sales).name") }}',
+        "details": 'Total revenue: '
+        '{{ products | jmespath("sum(@[].revenue)") }}',
     }
 
     context = {

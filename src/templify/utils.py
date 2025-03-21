@@ -1,7 +1,6 @@
 """
 Utility functions for Templify
 """
-from typing import Any, Dict, Union
 
 
 def is_placeholder(value: str) -> bool:
@@ -27,7 +26,8 @@ def extract_placeholder_value(placeholder: str) -> str:
     Extract the value from a placeholder string.
 
     Args:
-        placeholder: Placeholder string (e.g. "{user.name}" or "{{ products | jmespath(...) }}")
+        placeholder: Placeholder string
+            (e.g. "{user.name}" or "{{ products | jmespath(...) }}")
 
     Returns:
         The value inside the placeholder

@@ -91,7 +91,7 @@ Templify addresses these gaps with a clean and easy-to-use library interface.
 ### Example: Render Binary Documents (PDF)
 
     import templify
-    
+
     # Define your data context with values to insert into the template
     context = {
         'client_name': 'Acme Corporation',
@@ -108,7 +108,7 @@ Templify addresses these gaps with a clean and easy-to-use library interface.
         'tax_amount': 786.25,
         'total': 10036.25
     }
-    
+
     # Load the PDF template and fill in the placeholders
     templify.render_pdf_file(
         template_path='template_with_placeholders.pdf',  # Path to source PDF with placeholders
@@ -116,7 +116,7 @@ Templify addresses these gaps with a clean and easy-to-use library interface.
         context=context,                                 # Data context containing values for placeholders
         overwrite=True                                   # Optional: overwrite existing output file if it exists
     )
-    
+
     print("PDF document successfully generated at 'filled_document.pdf'")
 
 **Output:**

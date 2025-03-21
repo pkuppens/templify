@@ -1,7 +1,7 @@
 """
 Tests for utility functions
 """
-from templify.utils import is_placeholder, extract_placeholder_value
+from templify.utils import extract_placeholder_value, is_placeholder
 
 
 def test_is_placeholder():
