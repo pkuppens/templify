@@ -11,13 +11,17 @@ documentation = "https://pkuppens.github.io/templify"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-black = "^22.3.0"
-ruff = "^0.0.1"
-flake8 = "^4.0.1"
-pytest = "^7.1.2"
+jmespath = "^0.10.0"
+reportlab = "^4.1.0"
 
-[tool.poetry.dev-dependencies]
-pytest = "^7.1.2"
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+black = "^23.7.0"
+ruff = "^0.1.0"
+mypy = "^1.5.1"
+pytest-mock = "^3.12.0"
+pytest-xdist = "^3.5.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -29,36 +33,33 @@ target-version = ['py312']
 
 [tool.ruff]
 line-length = 88
+target-version = "py312"
+select = ["E", "F", "I", "N", "W", "B", "C4", "UP", "RUF"]
 
-[tool.flake8]
-max-line-length = 88
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q"
+addopts = "-ra -q --cov=templify --cov-report=term-missing"
 testpaths = [
     "tests",
 ]
-
-[tool.docker]
-image = "templify:latest"
-build = "docker build -t templify ."
-run = "docker run -it --rm templify"
-
-[tool.docker-compose]
-version = "3.8"
-services = {
-    templify = {
-        build = ".",
-        image = "templify:latest",
-        ports = ["8000:8000"],
-    },
-}
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]
 
 [tool.poetry.scripts]
 templify = "templify.cli:main"
-
-[tool.poetry.publish]
-repository = "pypi"
-username = "your-username"
-password = "your-password"

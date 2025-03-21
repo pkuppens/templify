@@ -1,7 +1,7 @@
 # Templify
 
 Templify simplifies advanced templating features.
-- templating within complex data structures.
+- templating within complex data structures
 - more advanced placeholders (JMESPath)
 - various output types, including binary formats like PDF.
 

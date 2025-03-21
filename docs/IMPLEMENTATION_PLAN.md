@@ -23,7 +23,7 @@ Follow the tasks and subtasks listed below to complete the implementation of the
   - [ ] Subtask 3.3: Configure `pytest`
   - [ ] Subtask 3.4: Create `Dockerfile` and `docker-compose.yml`
 - [ ] Task 4: Establish Project Structure
-  - [ ] Subtask 4.1: Create `src/your_package/`
+  - [ ] Subtask 4.1: Create `src/templify/`
   - [ ] Subtask 4.2: Create `tests/`
   - [ ] Subtask 4.3: Create `docs/`
   - [ ] Subtask 4.4: Create `.github/workflows/ci.yml`

@@ -1,62 +1,156 @@
-# DEVELOP.md
+# Development Guide
 
-## Setting Up the Development Environment
+This guide will help you set up your development environment for Templify.
+
+## Prerequisites
+
+### Python 3.12+
+
+#### Windows
+1. Download Python 3.12 from the [official Python website](https://www.python.org/downloads/)
+2. Run the installer
+3. Make sure to check "Add Python to PATH" during installation
+4. Verify installation:
+   ```cmd
+   python --version
+   ```
+
+#### Ubuntu/Debian
+```bash
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3.12 python3.12-venv
+```
+
+#### macOS
+```bash
+brew install python@3.12
+```
+
+### Poetry
+
+#### Windows
+```bash
+winget install poetry
+```
+
+#### Ubuntu/Debian and macOS
+```bash
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+### Verify Installation
+
+```bash
+python --version  # Should show Python 3.12.x
+poetry --version  # Should show Poetry version
+```
+
+## Project Setup
 
 1. Clone the repository:
-    ```sh
-    git clone https://github.com/pkuppens/templify.git
-    cd templify
-    ```
+   ```bash
+   git clone https://github.com/pkuppens/templify.git
+   cd templify
+   ```
 
-2. Install dependencies using Poetry:
-    ```sh
-    poetry install
-    ```
+2. Install dependencies:
+   ```bash
+   poetry install
+   ```
 
-3. Set up the virtual environment:
-    ```sh
-    poetry shell
-    ```
+3. Activate the virtual environment:
+   ```bash
+   poetry shell
+   ```
 
-## Running Tests and Code Quality Checks
+## Development Workflow
 
-1. Run tests using `pytest`:
-    ```sh
-    pytest
-    ```
+### Running Tests
 
-2. Run code formatting checks using `black`:
-    ```sh
-    black --check .
-    ```
+```bash
+# Run all tests
+pytest
 
-3. Run linting checks using `ruff` and `flake8`:
-    ```sh
-    ruff .
-    flake8 .
-    ```
+# Run tests with coverage
+pytest --cov=templify
 
-## Contributing to the Project
+# Run specific test file
+pytest tests/test_core.py
+```
 
-1. Fork the repository on GitHub.
+### Code Quality
 
-2. Create a new branch for your feature or bugfix:
-    ```sh
-    git checkout -b my-feature-branch
-    ```
+The project uses several tools to maintain code quality:
 
-3. Make your changes and commit them with a clear and concise message:
-    ```sh
-    git add .
-    git commit -m "Add new feature"
-    ```
+- `black` for code formatting
+- `ruff` for linting
+- `mypy` for type checking
 
-4. Push your changes to your forked repository:
-    ```sh
-    git push origin my-feature-branch
-    ```
+Run all checks:
+```bash
+# Format code
+black .
 
-5. Create a pull request on the main repository and describe your changes in detail.
+# Run linter
+ruff check .
+
+# Type checking
+mypy .
+```
+
+### Project Structure
+
+```
+templify/
+├── src/
+│   └── templify/
+│       ├── __init__.py
+│       ├── core.py
+│       └── utils.py
+├── tests/
+│   ├── test_core.py
+│   ├── test_utils.py
+│   └── fixtures/
+├── docs/
+├── pyproject.toml
+└── README.md
+```
+
+## Common Issues
+
+### Windows-specific
+
+1. If `poetry` command is not found after installation:
+   - Add Poetry to PATH: `%APPDATA%\Python\Scripts`
+   - Restart your terminal
+
+2. If Python 3.12 is not found:
+   - Verify Python installation in System Settings > Apps
+   - Check PATH environment variable
+
+### Unix/macOS-specific
+
+1. If Poetry installation fails:
+   ```bash
+   # Try installing with pip
+   pip install poetry
+   ```
+
+2. If Python 3.12 is not found:
+   ```bash
+   # On Ubuntu/Debian
+   sudo apt install python3.12-venv
+   
+   # On macOS
+   brew link python@3.12
+   ```
+
+## Getting Help
+
+- Check the [GitHub Issues](https://github.com/pkuppens/templify/issues)
+- Join our [Discussions](https://github.com/pkuppens/templify/discussions)
+- Contact the maintainers
 
 ## Additional Information
 
