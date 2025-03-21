@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types: [created]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.12
+
+      - name: Install dependencies
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          poetry install
+
+  code-quality:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Run black
+        run: poetry run black --check .
+
+      - name: Run ruff
+        run: poetry run ruff .
+
+      - name: Run flake8
+        run: poetry run flake8 .
+
+  test:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Run tests
+        run: poetry run pytest
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Build Docker image
+        run: docker build -t templify .
+
+      - name: Run Docker container
+        run: docker run -it --rm templify
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [setup, code-quality, test, docker]
+    if: github.event_name == 'release'
+    steps:
+      - name: Publish to PyPI
+        run: poetry publish --username ${{ secrets.PYPI_USERNAME }} --password ${{ secrets.PYPI_PASSWORD }}
+
+  docs:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Generate documentation
+        run: |
+          poetry run sphinx-build -b html docs/ docs/_build/html
+
+      - name: Deploy documentation to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: [setup, code-quality, test, docker, deploy, docs]
+    steps:
+      - name: Notify on success
+        if: success()
+        run: echo "Build succeeded!"
+
+      - name: Notify on failure
+        if: failure()
+        run: echo "Build failed!"

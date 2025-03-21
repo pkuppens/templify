@@ -1,0 +1,64 @@
+[tool.poetry]
+name = "templify"
+version = "0.1.0"
+description = "Templify simplifies advanced templating features."
+authors = ["Pieter Kuppens <pieter@example.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/pkuppens/templify"
+repository = "https://github.com/pkuppens/templify"
+documentation = "https://pkuppens.github.io/templify"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+black = "^22.3.0"
+ruff = "^0.0.1"
+flake8 = "^4.0.1"
+pytest = "^7.1.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.1.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+
+[tool.ruff]
+line-length = 88
+
+[tool.flake8]
+max-line-length = 88
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
+
+[tool.docker]
+image = "templify:latest"
+build = "docker build -t templify ."
+run = "docker run -it --rm templify"
+
+[tool.docker-compose]
+version = "3.8"
+services = {
+    templify = {
+        build = ".",
+        image = "templify:latest",
+        ports = ["8000:8000"],
+    },
+}
+
+[tool.poetry.scripts]
+templify = "templify.cli:main"
+
+[tool.poetry.publish]
+repository = "pypi"
+username = "your-username"
+password = "your-password"
