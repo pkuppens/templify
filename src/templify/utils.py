@@ -38,9 +38,9 @@ def extract_placeholder_value(placeholder: str) -> str:
     # Remove the outer braces
     value = placeholder.strip("{}")
 
-    # If it's a JMESPath expression, return the full expression
+    # If it's a JMESPath expression, return the full expression, stripped of whitespace
     if "| jmespath" in value:
-        return value
+        return value.strip()
 
     # Otherwise, return the path
     return value.strip()
