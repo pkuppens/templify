@@ -14,10 +14,10 @@ def is_placeholder(value: str) -> bool:
         True if the string is a placeholder, False otherwise
     """
     return isinstance(value, str) and (
-        value.startswith("{")
-        and value.endswith("}")
-        or value.startswith("{{")
-        and value.endswith("}}")
+        (value.startswith("{")
+        and value.endswith("}"))
+        or (value.startswith("{{")
+        and value.endswith("}}"))
     )
 
 

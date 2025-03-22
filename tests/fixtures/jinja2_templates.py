@@ -2,7 +2,7 @@
 Test fixtures for Jinja2 templates.
 """
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 # Basic template with variable replacement
 BASIC_TEMPLATE = """
@@ -188,7 +188,7 @@ COMPLEX_TEMPLATE = """
 """
 
 # Sample context data for testing
-SAMPLE_CONTEXT: Dict[str, Any] = {
+SAMPLE_CONTEXT: dict[str, Any] = {
     "name": "Alice",
     "balance": 1234.56,
     "user": {

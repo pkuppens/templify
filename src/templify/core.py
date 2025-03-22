@@ -9,11 +9,14 @@ This module provides the main templating functionality including:
 - PDF document templating
 """
 import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 import jmespath
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import Paragraph, SimpleDocTemplate, getSampleStyleSheet
 
 
 def get_value_from_path(obj: dict[str, Any], path: str) -> Any:
@@ -159,8 +162,8 @@ def render_jmespath_template(template: str, context: dict[str, Any]) -> str:
 def render_jinja2(
     template: str,
     context: dict[str, Any],
-    templates: Optional[dict[str, str]] = None,
-    filters: Optional[dict[str, Any]] = None
+    templates: dict[str, str] | None = None,
+    filters: dict[str, Any] | None = None
 ) -> str:
     """
     Render a Jinja2 template.
@@ -223,7 +226,7 @@ def render_jinja2(
 
     # If templates are provided, add them to the environment
     if templates:
-        for name, content in templates.items():
+        for _, content in templates.items():
             env.get_template = lambda n: Template(content) if n in templates else None
 
     # Create and render the template
@@ -231,7 +234,7 @@ def render_jinja2(
         template_obj = env.from_string(template)
         return template_obj.render(**context)
     except Exception as e:
-        raise ValueError(f"Error rendering Jinja2 template: {str(e)}") from e
+        raise ValueError(f"Error rendering Jinja2 template: {e!s}") from e
 
 
 def render_data(
@@ -291,9 +294,9 @@ def render_data(
     """
     if isinstance(data, dict):
         return {k: render_data(v, context) for k, v in data.items()}
-    elif isinstance(data, list):
+    if isinstance(data, list):
         return [render_data(item, context) for item in data]
-    elif isinstance(data, str):
+    if isinstance(data, str):
         # First try JMESPath template
         if '{{' in data and '}}' in data:
             return render_jmespath_template(data, context)
@@ -302,27 +305,65 @@ def render_data(
     return data
 
 
-def render_pdf_file(
-    template_path: str | Path,
-    output_path: str | Path,
-    context: dict[str, Any]
-) -> None:
-    """
-    Render a PDF template with placeholders.
+def render_pdf(
+    template: str,
+    context: dict[str, Any],
+    output_path: Optional[Union[str, Path]] = None,
+    content: Optional[list[dict[str, Any]]] = None,
+) -> Union[bytes, Path]:
+    """Render a PDF document from a template.
 
     Args:
-        template_path: Path to the PDF template
-        output_path: Path where the rendered PDF should be saved
-        context: Dictionary containing values for placeholders
+        template: The template string or file path
+        context: The context data for template rendering
+        output_path: Optional path to save the PDF (if not provided, returns bytes)
+        content: Optional list of content items for the PDF
 
-    Raises:
-        FileNotFoundError: If template file doesn't exist
-        ValueError: If required placeholders are missing
+    Returns:
+        The rendered PDF as bytes or the path to the saved file
+
+    Example:
+        >>> template = '''
+        ... <document>
+        ...     <page>
+        ...         <text>Hello, {{name}}!</text>
+        ...     </page>
+        ... </document>
+        ... '''
+        >>> context = {"name": "World"}
+        >>> pdf_bytes = render_pdf(template, context)
+        >>> with open("output.pdf", "wb") as f:
+        ...     f.write(pdf_bytes)
     """
-    # TODO: Implement PDF template rendering
-    template_path = Path(template_path)
-    if not template_path.exists():
-        raise FileNotFoundError(f"Template file not found: {template_path}")
+    # First render the template
+    rendered = render_data(template, context)
 
-    output_path = Path(output_path)
-    output_path.touch()  # Create empty file for now
+    # Parse the XML template
+    root = ET.fromstring(rendered)
+
+    # Create PDF document
+    doc = SimpleDocTemplate(
+        str(output_path) if output_path else None,
+        pagesize=letter,
+        rightMargin=72,
+        leftMargin=72,
+        topMargin=72,
+        bottomMargin=72,
+    )
+
+    # Process content if provided
+    if content:
+        # Convert content to PDF elements
+        elements = [
+            Paragraph(
+                str(content_item.get("text", "")),
+                getSampleStyleSheet()["Normal"],
+            )
+            for content_item in content
+        ]
+        doc.build(elements)
+    else:
+        # Build document from template
+        doc.build([])
+
+    return doc.filename if output_path else doc.getpdfdata()

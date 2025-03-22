@@ -19,7 +19,8 @@ def test_cli_invalid_command():
     """Test invalid command handling"""
     with pytest.raises(SystemExit) as exc_info:
         main(["invalid-command"])
-    assert exc_info.value.code == 2  # argparse error code
+    expected_exit_code = 2  # argparse error code
+    assert exc_info.value.code == expected_exit_code  # argparse error code
 
 
 def test_cli_unimplemented_command():
