@@ -1,7 +1,6 @@
 """
 Utility functions for Templify
 """
-from typing import Any, Dict, Union
 
 
 def is_placeholder(value: str) -> bool:
@@ -15,10 +14,10 @@ def is_placeholder(value: str) -> bool:
         True if the string is a placeholder, False otherwise
     """
     return isinstance(value, str) and (
-        value.startswith("{")
-        and value.endswith("}")
-        or value.startswith("{{")
-        and value.endswith("}}")
+        (value.startswith("{")
+        and value.endswith("}"))
+        or (value.startswith("{{")
+        and value.endswith("}}"))
     )
 
 
@@ -27,7 +26,8 @@ def extract_placeholder_value(placeholder: str) -> str:
     Extract the value from a placeholder string.
 
     Args:
-        placeholder: Placeholder string (e.g. "{user.name}" or "{{ products | jmespath(...) }}")
+        placeholder: Placeholder string
+            (e.g. "{user.name}" or "{{ products | jmespath(...) }}")
 
     Returns:
         The value inside the placeholder
@@ -38,9 +38,9 @@ def extract_placeholder_value(placeholder: str) -> str:
     # Remove the outer braces
     value = placeholder.strip("{}")
 
-    # If it's a JMESPath expression, return the full expression
+    # If it's a JMESPath expression, return the full expression, stripped of whitespace
     if "| jmespath" in value:
-        return value
+        return value.strip()
 
     # Otherwise, return the path
     return value.strip()

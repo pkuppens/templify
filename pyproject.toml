@@ -1,43 +1,55 @@
 [tool.poetry]
 name = "templify"
 version = "0.1.0"
-description = "Templify simplifies advanced templating features."
-authors = ["Pieter Kuppens <pieter@example.com>"]
+description = "A powerful templating library that supports multiple template formats and data structures"
+authors = ["Pieter Kuppens <pieter.kuppens@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/pkuppens/templify"
 repository = "https://github.com/pkuppens/templify"
 documentation = "https://pkuppens.github.io/templify"
+packages = [{include = "templify", from = "src"}]
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.9,<4.0"
 jmespath = "^0.10.0"
+jinja2 = "^3.1.3"
 reportlab = "^4.1.0"
-
-[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.2.0"
 pytest = "^7.4.0"
 pytest-cov = "^4.1.0"
-black = "^23.7.0"
 ruff = "^0.1.0"
 mypy = "^1.5.1"
 pytest-mock = "^3.12.0"
 pytest-xdist = "^3.5.0"
+jsonschema = "^4.23.0"
+sphinx = "^7.2.6"
+sphinx-rtd-theme = "^2.0.0"
+sphinx-autodoc-typehints = "^1.25.2"
+sphinx-copybutton = "^0.5.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-line-length = 88
-target-version = ['py312']
-
 [tool.ruff]
-line-length = 88
+line-length = 132
 target-version = "py312"
-select = ["E", "F", "I", "N", "W", "B", "C4", "UP", "RUF"]
+select = ["E", "I", "W", "C4", "RUF", "SIM", "TID", "TCH", "RSE", "RET", "SLF", "ERA", "PD", "PGH", "PL"]
+ignore = []
+
+[tool.ruff.isort]
+known-first-party = ["templify"]
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/*" = ["S101"]
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.8"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
@@ -49,6 +61,7 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
+strict_optional = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
