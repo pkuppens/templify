@@ -1,7 +1,7 @@
 site_name: Templify
 site_description: A powerful templating library that supports multiple template formats and data structures
 theme:
-  name: material
+  name: mkdocs
   features:
     - navigation.tabs
     - navigation.sections

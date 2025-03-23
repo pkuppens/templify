@@ -29,6 +29,12 @@ sphinx-autodoc-typehints = "^1.25.2"
 sphinx-copybutton = "^0.5.2"
 mkdocs = "^1.6.1"
 
+[tool.poetry.group.dev.dependencies]
+mkdocs = "^1.6.1"
+mkdocs-material = "^9.6.9"
+mkdocs-minify-plugin = "^0.8.0"
+mkdocs-git-revision-date-localized-plugin = "^1.4.5"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
