@@ -347,7 +347,6 @@ async def generate_reports(templates, contexts):
 
 ### Development Dependencies
 - pytest: Testing framework
-- black: Code formatting
 - ruff: Linting
 - mypy: Type checking
 

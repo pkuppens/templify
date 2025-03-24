@@ -548,7 +548,6 @@ jmespath = "^0.10.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.4.0"
-black = "^23.7.0"
 ruff = "^0.1.0"
 mypy = "^1.5.0"
 ```
@@ -803,7 +802,6 @@ with PerformanceMonitor() as monitor:
 
 ### 2. Development Dependencies
 - pytest: Testing
-- black: Code formatting
 - ruff: Linting
 - mypy: Type checking
 - mkdocs: Documentation

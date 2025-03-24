@@ -96,9 +96,6 @@ jobs:
       - name: Run ruff
         run: poetry run ruff .
 
-      - name: Run flake8
-        run: poetry run flake8 .
-
   # Job to run tests
   test:
     runs-on: ubuntu-latest

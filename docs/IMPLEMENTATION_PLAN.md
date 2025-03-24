@@ -18,10 +18,9 @@ Follow the tasks and subtasks listed below to complete the implementation of the
   - [ ] Subtask 2.2: Generate `DEVELOP.md`
   - [ ] Subtask 2.3: Generate `IMPLEMENTATION_PLAN.md`
 - [ ] Task 3: Tooling Configuration
-  - [ ] Subtask 3.1: Configure `black`
-  - [ ] Subtask 3.2: Configure `ruff` and `flake8`
-  - [ ] Subtask 3.3: Configure `pytest`
-  - [ ] Subtask 3.4: Create `Dockerfile` and `docker-compose.yml`
+  - [ ] Subtask 3.1: Configure `ruff` for code quality checks
+  - [ ] Subtask 3.2: Configure `pytest` for testing
+  - [ ] Subtask 3.3: Create `Dockerfile` and `docker-compose.yml`: create docker image for testing.
 - [ ] Task 4: Establish Project Structure
   - [ ] Subtask 4.1: Create `src/templify/`
   - [ ] Subtask 4.2: Create `tests/`

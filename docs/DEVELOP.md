@@ -82,17 +82,12 @@ pytest tests/test_core.py
 ### Code Quality
 
 The project uses several tools to maintain code quality:
-
-- `black` for code formatting
-- `ruff` for linting
-- `mypy` for type checking
+- Ruff for linting and code formatting - replaces black, flake8, and isort
+- MyPy for type checking
 
 Run all checks:
 ```bash
-# Format code
-black .
-
-# Run linter
+# Run linter and formatter
 ruff check .
 
 # Type checking

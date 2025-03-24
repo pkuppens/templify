@@ -131,8 +131,7 @@ pytest
 ### Code Style
 
 This project uses:
-- Black for code formatting
-- Ruff for linting
+- Ruff for linting and code formatting - replaces black, flake8, and isort
 - MyPy for type checking
 
 Run pre-commit hooks to ensure code quality:
