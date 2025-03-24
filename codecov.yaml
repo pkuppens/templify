@@ -1,0 +1,32 @@
+# Configuration file for Codecov
+coverage:
+  # Defines the valid coverage range reported by Codecov (used for color-coding)
+  range: 60..100
+
+  # Rounds coverage percentage down to nearest integer for simplicity
+  round: down
+
+  # Sets precision of coverage percentage to 1 decimal place
+  precision: 1
+
+  status:
+    project:
+      default:
+        # Target coverage percentage expected from the project
+        # Recommended for production: 90%
+        # Temporarily relaxed to 60% for ongoing development
+        target: 60%
+
+        # Allowable decrease before triggering failure, this can occur when refactoring
+        # code that is covered by tests, and the number of lines of code is reduced.
+        # 0.5% means coverage can decrease by 0.5% without failing checks
+        threshold: 0.5%
+
+        # Specify coverage levels for warnings and errors clearly
+        informational: false
+
+        # Define explicit threshold levels for warnings and errors
+        warnings:
+          - threshold: 90%  # Below 90% triggers a warning
+        errors:
+          - threshold: 60%  # Below 60% triggers an error
