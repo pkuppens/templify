@@ -35,8 +35,6 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.details
-  - pymdownx.tabbed
-  - pymdownx.tasklist
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.betterem:
@@ -46,27 +44,6 @@ markdown_extensions:
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.smartsymbols
-  - pymdownx.tabbed
-  - pymdownx.tasklist
-  - pymdownx.tilde
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - pymdownx.details
-  - pymdownx.tabbed
-  - pymdownx.tasklist
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.betterem:
-      smart_enable: all
-  - pymdownx.caret
-  - pymdownx.critic
-  - pymdownx.keys
-  - pymdownx.mark
-  - pymdownx.smartsymbols
-  - pymdownx.tabbed
-  - pymdownx.tasklist
   - pymdownx.tilde
 
 nav:
