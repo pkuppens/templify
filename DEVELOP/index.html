@@ -14,10 +14,7 @@ pytest --cov=templify
 
 # Run specific test file
 pytest tests/test_core.py
-</code></pre> <h3 id=code-quality>Code Quality</h3> <p>The project uses several tools to maintain code quality:</p> <ul> <li><code>black</code> for code formatting</li> <li><code>ruff</code> for linting</li> <li><code>mypy</code> for type checking</li> </ul> <p>Run all checks:</p> <pre><code class=language-bash># Format code
-black .
-
-# Run linter
+</code></pre> <h3 id=code-quality>Code Quality</h3> <p>The project uses several tools to maintain code quality: - Ruff for linting and code formatting - replaces black, flake8, and isort - MyPy for type checking</p> <p>Run all checks:</p> <pre><code class=language-bash># Run linter and formatter
 ruff check .
 
 # Type checking
