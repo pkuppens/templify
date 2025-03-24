@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang=en data-bs-theme=light> <head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width, initial-scale=1.0"><link rel="shortcut icon" href=../../img/favicon.ico><title>Architecture - Templify</title><link href=../../css/bootstrap.min.css rel=stylesheet><link href=../../css/fontawesome.min.css rel=stylesheet><link href=../../css/brands.min.css rel=stylesheet><link href=../../css/solid.min.css rel=stylesheet><link href=../../css/v4-font-face.min.css rel=stylesheet><link href=../../css/base.css rel=stylesheet><link id=hljs-light rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css><link id=hljs-dark rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css disabled><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js></script><script>hljs.highlightAll();</script></head> <body> <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary"> <div class=container> <a class=navbar-brand href=../..>Templify</a> <!-- Expander button --> <button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#navbar-collapse aria-controls=navbar-collapse aria-expanded=false aria-label="Toggle navigation"> <span class=navbar-toggler-icon></span> </button> <!-- Expanded navigation --> <div id=navbar-collapse class="navbar-collapse collapse"> <!-- Main navigation --> <ul class="nav navbar-nav"> <li class=nav-item> <a href=../.. class=nav-link>Home</a> </li> <li class="nav-item dropdown"> <a href=# class="nav-link dropdown-toggle" role=button data-bs-toggle=dropdown aria-expanded=false>Getting Started</a> <ul class=dropdown-menu> <li> <a href=../../guides/installation.md class=dropdown-item>Installation</a> </li> <li> <a href=../../guides/quickstart.md class=dropdown-item>Quick Start</a> </li> <li> <a href=../../guides/templates.md class=dropdown-item>Templates</a> </li> <li> <a href=../../guides/advanced.md class=dropdown-item>Advanced Usage</a> </li> </ul> </li> <li class="nav-item dropdown"> <a href=# class="nav-link dropdown-toggle" role=button data-bs-toggle=dropdown aria-expanded=false>API Reference</a> <ul class=dropdown-menu> <li> <a href=../../api/core.md class=dropdown-item>Core</a> </li> <li> <a href=../../api/utils.md class=dropdown-item>Utils</a> </li> <li> <a href=../../api/extensions.md class=dropdown-item>Extensions</a> </li> </ul> </li> <li class="nav-item dropdown"> <a href=# class="nav-link dropdown-toggle active" aria-current=page role=button data-bs-toggle=dropdown aria-expanded=false>Development</a> <ul class=dropdown-menu> <li> <a href=../contributing.md class=dropdown-item>Contributing</a> </li> <li> <a href=./ class="dropdown-item active" aria-current=page>Architecture</a> </li> <li> <a href=../testing.md class=dropdown-item>Testing</a> </li> <li> <a href=../releasing.md class=dropdown-item>Releasing</a> </li> </ul> </li> <li class="nav-item dropdown"> <a href=# class="nav-link dropdown-toggle" role=button data-bs-toggle=dropdown aria-expanded=false>Reference</a> <ul class=dropdown-menu> <li> <a href=../../reference/requirements/ class=dropdown-item>Requirements</a> </li> <li> <a href=../../reference/changelog.md class=dropdown-item>Changelog</a> </li> <li> <a href=../../reference/security.md class=dropdown-item>Security</a> </li> </ul> </li> </ul> <ul class="nav navbar-nav ms-md-auto"> <li class=nav-item> <a href=# class=nav-link data-bs-toggle=modal data-bs-target=#mkdocs_search_modal> <i class="fa fa-search"></i> Search </a> </li> <li class=nav-item> <a rel=prev href=../.. class=nav-link> <i class="fa fa-arrow-left"></i> Previous </a> </li> <li class=nav-item> <a rel=next href=../../reference/requirements/ class=nav-link> Next <i class="fa fa-arrow-right"></i> </a> </li> </ul> </div> </div> </div> <div class=container> <div class=row> <div class=col-md-3><div class="navbar-expand-md bs-sidebar hidden-print affix" role=complementary> <div class=navbar-header> <button type=button class="navbar-toggler collapsed" data-bs-toggle=collapse data-bs-target=#toc-collapse title="Table of Contents"> <span class="fa fa-angle-down"></span> </button> </div> <div id=toc-collapse class="navbar-collapse collapse card bg-body-tertiary"> <ul class="nav flex-column"> <li class=nav-item data-bs-level=1><a href=#architecture class=nav-link>Architecture</a> <ul class="nav flex-column"> <li class=nav-item data-bs-level=2><a href=#overview class=nav-link>Overview</a> <ul class="nav flex-column"> </ul> </li> <li class=nav-item data-bs-level=2><a href=#system-components class=nav-link>System Components</a> <ul class="nav flex-column"> </ul> </li> <li class=nav-item data-bs-level=2><a href=#data-flow class=nav-link>Data Flow</a> <ul class="nav flex-column"> </ul> </li> <li class=nav-item data-bs-level=2><a href=#extension-points class=nav-link>Extension Points</a> <ul class="nav flex-column"> </ul> </li> <li class=nav-item data-bs-level=2><a href=#error-handling class=nav-link>Error Handling</a> <ul class="nav flex-column"> </ul> </li> <li class=nav-item data-bs-level=2><a href=#performance-considerations class=nav-link>Performance Considerations</a> <ul class="nav flex-column"> </ul> </li> <li class=nav-item data-bs-level=2><a href=#security class=nav-link>Security</a> <ul class="nav flex-column"> </ul> </li> <li class=nav-item data-bs-level=2><a href=#future-extensions class=nav-link>Future Extensions</a> <ul class="nav flex-column"> </ul> </li> <li class=nav-item data-bs-level=2><a href=#dependencies class=nav-link>Dependencies</a> <ul class="nav flex-column"> </ul> </li> <li class=nav-item data-bs-level=2><a href=#testing-strategy class=nav-link>Testing Strategy</a> <ul class="nav flex-column"> </ul> </li> </ul> </li> </ul> </div> </div></div> <div class=col-md-9 role=main> <h1 id=architecture>Architecture</h1> <p>This document describes the architecture and design of the Templify library, focusing on practical use cases and real-world scenarios.</p> <h2 id=overview>Overview</h2> <p>Templify is designed as a modular and extensible templating library that supports multiple template formats and data structures. The architecture follows clean architecture principles with clear separation of concerns.</p> <h2 id=system-components>System Components</h2> <h3 id=core-components>Core Components</h3> <pre><code class=language-mermaid>graph TD
+    A[Template Engine] --&gt; B[Text Renderer]
+    A --&gt; C[Data Renderer]
+    A --&gt; D[Jinja2 Renderer]
+    B --&gt; E[Template Parser]
+    C --&gt; F[JMESPath Engine]
+    D --&gt; G[Jinja2 Environment]
+</code></pre> <h4 id=1-template-engine>1. Template Engine</h4> <p><strong>Purpose</strong>: Central coordinator for all template operations <strong>Responsibilities</strong>: - Route templates to appropriate renderer based on format - Manage template lifecycle (loading, caching, rendering) - Provide unified API for all template types - Handle error propagation and recovery</p> <p><strong>Example Use Case</strong>:</p> <pre><code class=language-python># Template Engine automatically detects format and routes to appropriate renderer
+from templify import render
+
+# Text template
+result1 = render(&quot;Hello, {name}!&quot;, {&quot;name&quot;: &quot;Alice&quot;})
+
+# Data structure template
+result2 = render({
+    &quot;user&quot;: {&quot;name&quot;: &quot;{name}&quot;},
+    &quot;settings&quot;: {&quot;theme&quot;: &quot;{theme}&quot;}
+}, {&quot;name&quot;: &quot;Alice&quot;, &quot;theme&quot;: &quot;dark&quot;})
+
+# Jinja2 template
+result3 = render(&quot;&quot;&quot;
+    {% if user.is_admin %}
+        Welcome, Administrator {{ user.name }}!
+    {% endif %}
+&quot;&quot;&quot;, {&quot;user&quot;: {&quot;name&quot;: &quot;Alice&quot;, &quot;is_admin&quot;: True}})
+</code></pre> <h4 id=2-text-renderer>2. Text Renderer</h4> <p><strong>Purpose</strong>: Handle simple text-based templates with placeholders <strong>Responsibilities</strong>: - Process basic string interpolation - Handle escape sequences and special characters - Support default values and optional variables - Optimize for high-performance text processing</p> <p><strong>Example Use Case</strong>:</p> <pre><code class=language-python># Simple text template with defaults
+template = &quot;Welcome, {name}! Your balance is {balance:0.00}&quot;
+context = {&quot;name&quot;: &quot;Alice&quot;}
+result = render_text(template, context)
+# Result: &quot;Welcome, Alice! Your balance is 0.00&quot;
+
+# Text template with escaping
+template = &quot;Path: {path}&quot;
+context = {&quot;path&quot;: &quot;C:\\Users\\Alice&quot;}
+result = render_text(template, context)
+# Result: &quot;Path: C:\Users\Alice&quot;
+</code></pre> <h4 id=3-data-renderer>3. Data Renderer</h4> <p><strong>Purpose</strong>: Process structured data templates with JMESPath support <strong>Responsibilities</strong>: - Transform complex data structures - Execute JMESPath queries - Handle recursive template application - Validate data types and structure</p> <p><strong>Example Use Case</strong>:</p> <pre><code class=language-python># Complex data transformation
+template = {
+    &quot;summary&quot;: {
+        &quot;total_sales&quot;: &quot;{{ sales | jmespath('sum(@[].amount)') }}&quot;,
+        &quot;top_product&quot;: &quot;{{ products | jmespath('max_by(@, &amp;revenue).name') }}&quot;
+    },
+    &quot;recent_orders&quot;: &quot;{{ orders | jmespath('sort_by(@, &amp;date)[-3:]') }}&quot;
+}
+
+context = {
+    &quot;sales&quot;: [
+        {&quot;amount&quot;: 100, &quot;date&quot;: &quot;2024-01-01&quot;},
+        {&quot;amount&quot;: 200, &quot;date&quot;: &quot;2024-01-02&quot;}
+    ],
+    &quot;products&quot;: [
+        {&quot;name&quot;: &quot;Product A&quot;, &quot;revenue&quot;: 1000},
+        {&quot;name&quot;: &quot;Product B&quot;, &quot;revenue&quot;: 2000}
+    ],
+    &quot;orders&quot;: [
+        {&quot;id&quot;: 1, &quot;date&quot;: &quot;2024-01-01&quot;},
+        {&quot;id&quot;: 2, &quot;date&quot;: &quot;2024-01-02&quot;},
+        {&quot;id&quot;: 3, &quot;date&quot;: &quot;2024-01-03&quot;},
+        {&quot;id&quot;: 4, &quot;date&quot;: &quot;2024-01-04&quot;}
+    ]
+}
+</code></pre> <h4 id=4-jinja2-renderer>4. Jinja2 Renderer</h4> <p><strong>Purpose</strong>: Provide full Jinja2 template capabilities <strong>Responsibilities</strong>: - Execute Jinja2 templates with inheritance - Manage template includes and macros - Handle custom filters and extensions - Support template caching</p> <p><strong>Example Use Case</strong>:</p> <pre><code class=language-python># Template inheritance
+base_template = &quot;&quot;&quot;
+{% block content %}
+    Welcome, {{ user.name }}!
+{% endblock %}
+&quot;&quot;&quot;
+
+child_template = &quot;&quot;&quot;
+{% extends &quot;base&quot; %}
+{% block content %}
+    {{ super() }}
+    Your recent activity:
+    {% for activity in user.recent_activities %}
+        - {{ activity.type }}: {{ activity.description }}
+    {% endfor %}
+{% endblock %}
+&quot;&quot;&quot;
+
+# Custom filter
+@jinja2_env.filter
+def format_currency(value):
+    return f&quot;${value:,.2f}&quot;
+
+# Usage
+template = &quot;Total: {{ amount | format_currency }}&quot;
+context = {&quot;amount&quot;: 1234.56}
+</code></pre> <h2 id=data-flow>Data Flow</h2> <pre><code class=language-mermaid>sequenceDiagram
+    participant User
+    participant Engine
+    participant Parser
+    participant Renderer
+    participant Cache
+
+    Note over User: User wants to generate&lt;br/&gt;a personalized report
+    User-&gt;&gt;Engine: render(template, context)
+    Note over Engine: Template Engine detects&lt;br/&gt;format and loads template
+    Engine-&gt;&gt;Cache: get(template)
+    alt Cache Hit
+        Cache--&gt;&gt;Engine: cached_template
+        Note over Engine: Using cached template&lt;br/&gt;for better performance
+    else Cache Miss
+        Engine-&gt;&gt;Parser: parse(template)
+        Parser--&gt;&gt;Engine: parsed_template
+        Engine-&gt;&gt;Cache: store(parsed_template)
+        Note over Engine: Template parsed and&lt;br/&gt;cached for future use
+    end
+    Engine-&gt;&gt;Renderer: render(parsed_template, context)
+    Note over Renderer: Applying context data&lt;br/&gt;and executing template
+    Renderer--&gt;&gt;Engine: result
+    Engine--&gt;&gt;User: result
+    Note over User: User receives&lt;br/&gt;personalized report
+</code></pre> <h2 id=extension-points>Extension Points</h2> <h3 id=1-custom-template-formats>1. Custom Template Formats</h3> <p><strong>Purpose</strong>: Allow users to add support for new template formats <strong>Example</strong>:</p> <pre><code class=language-python>class CustomTemplateParser(TemplateParser):
+    def parse(self, template: str) -&gt; ParsedTemplate:
+        # Parse custom template format
+        pass
+
+    def validate(self, template: str) -&gt; bool:
+        # Validate custom template syntax
+        pass
+
+# Register custom parser
+template_engine.register_parser(&quot;custom&quot;, CustomTemplateParser())
+</code></pre> <h3 id=2-custom-renderers>2. Custom Renderers</h3> <p><strong>Purpose</strong>: Support new output formats or rendering strategies <strong>Example</strong>:</p> <pre><code class=language-python>class PDFRenderer(Renderer):
+    def render(self, template: ParsedTemplate, context: Dict) -&gt; bytes:
+        # Generate PDF from template
+        pass
+
+# Register PDF renderer
+template_engine.register_renderer(&quot;pdf&quot;, PDFRenderer())
+</code></pre> <h3 id=3-custom-filters>3. Custom Filters</h3> <p><strong>Purpose</strong>: Add custom data transformation capabilities <strong>Example</strong>:</p> <pre><code class=language-python>@template_engine.register_filter
+def format_date(value: datetime) -&gt; str:
+    return value.strftime(&quot;%Y-%m-%d&quot;)
+
+# Usage in template
+template = &quot;Last updated: {{ date | format_date }}&quot;
+</code></pre> <h2 id=error-handling>Error Handling</h2> <h3 id=1-template-errors>1. Template Errors</h3> <p><strong>Purpose</strong>: Provide clear feedback for template-related issues <strong>Example</strong>:</p> <pre><code class=language-python>try:
+    result = render(&quot;Hello, {name}!&quot;, {})
+except TemplateError as e:
+    print(f&quot;Template error: {e.message}&quot;)
+    print(f&quot;Missing variables: {e.missing_variables}&quot;)
+</code></pre> <h3 id=2-runtime-errors>2. Runtime Errors</h3> <p><strong>Purpose</strong>: Handle context and execution errors gracefully <strong>Example</strong>:</p> <pre><code class=language-python>try:
+    result = render_data({
+        &quot;total&quot;: &quot;{{ sales | jmespath('sum(@[].amount)') }}&quot;
+    }, {&quot;sales&quot;: None})
+except RuntimeError as e:
+    print(f&quot;Runtime error: {e.message}&quot;)
+    print(f&quot;Error context: {e.context}&quot;)
+</code></pre> <h2 id=performance-considerations>Performance Considerations</h2> <h3 id=1-caching-strategy>1. Caching Strategy</h3> <p><strong>Purpose</strong>: Optimize template processing for repeated use <strong>Example</strong>:</p> <pre><code class=language-python># Template is parsed once and cached
+template = &quot;Hello, {name}!&quot;
+context1 = {&quot;name&quot;: &quot;Alice&quot;}
+context2 = {&quot;name&quot;: &quot;Bob&quot;}
+
+# Both renders use cached parsed template
+result1 = render(template, context1)
+result2 = render(template, context2)
+</code></pre> <h3 id=2-optimization-techniques>2. Optimization Techniques</h3> <p><strong>Purpose</strong>: Improve rendering performance for large templates <strong>Example</strong>:</p> <pre><code class=language-python># Pre-compile complex template
+template = &quot;&quot;&quot;
+{% for user in users %}
+    {% if user.is_active %}
+        {{ user.name }}: {{ user.balance | format_currency }}
+    {% endif %}
+{% endfor %}
+&quot;&quot;&quot;
+compiled = template_engine.compile(template)
+
+# Use compiled template for better performance
+for batch in user_batches:
+    result = compiled.render(batch)
+</code></pre> <h2 id=security>Security</h2> <h3 id=1-template-security>1. Template Security</h3> <p><strong>Purpose</strong>: Prevent template-based security vulnerabilities <strong>Example</strong>:</p> <pre><code class=language-python># Sandboxed template execution
+template = &quot;&quot;&quot;
+{% import os %}
+{{ os.system('rm -rf /') }}
+&quot;&quot;&quot;
+# Raises SecurityError: Import of 'os' not allowed
+</code></pre> <h3 id=2-data-security>2. Data Security</h3> <p><strong>Purpose</strong>: Protect sensitive data in templates <strong>Example</strong>:</p> <pre><code class=language-python># Context isolation
+template = &quot;{{ user.password }}&quot;  # Raises SecurityError
+template = &quot;{{ user.name }}&quot;      # Allowed
+</code></pre> <h2 id=future-extensions>Future Extensions</h2> <h3 id=1-planned-features>1. Planned Features</h3> <p><strong>Purpose</strong>: Enhance template capabilities <strong>Example</strong>:</p> <pre><code class=language-python># Future PDF generation
+template = &quot;&quot;&quot;
+# Invoice
+Customer: {{ customer.name }}
+Items:
+{% for item in items %}
+- {{ item.name }}: {{ item.price }}
+{% endfor %}
+&quot;&quot;&quot;
+result = render(template, context, format=&quot;pdf&quot;)
+</code></pre> <h3 id=2-potential-improvements>2. Potential Improvements</h3> <p><strong>Purpose</strong>: Optimize for specific use cases <strong>Example</strong>:</p> <pre><code class=language-python># Future async rendering
+async def generate_reports(templates, contexts):
+    tasks = [
+        render_async(template, context)
+        for template, context in zip(templates, contexts)
+    ]
+    return await asyncio.gather(*tasks)
+</code></pre> <h2 id=dependencies>Dependencies</h2> <h3 id=core-dependencies>Core Dependencies</h3> <ul> <li>Jinja2: Template engine for complex templating</li> <li>JMESPath: Data querying for transformations</li> <li>typing: Type hints for better IDE support</li> <li>dataclasses: Data structure handling</li> </ul> <h3 id=development-dependencies>Development Dependencies</h3> <ul> <li>pytest: Testing framework</li> <li>black: Code formatting</li> <li>ruff: Linting</li> <li>mypy: Type checking</li> </ul> <h2 id=testing-strategy>Testing Strategy</h2> <h3 id=1-unit-tests>1. Unit Tests</h3> <p><strong>Purpose</strong>: Verify individual component behavior <strong>Example</strong>:</p> <pre><code class=language-python>def test_text_renderer():
+    renderer = TextRenderer()
+    result = renderer.render(&quot;Hello, {name}!&quot;, {&quot;name&quot;: &quot;Alice&quot;})
+    assert result == &quot;Hello, Alice!&quot;
+</code></pre> <h3 id=2-integration-tests>2. Integration Tests</h3> <p><strong>Purpose</strong>: Verify component interactions <strong>Example</strong>:</p> <pre><code class=language-python>def test_template_engine():
+    engine = TemplateEngine()
+    result = engine.render(
+        &quot;{{ user.name }} has {{ orders | length }} orders&quot;,
+        {
+            &quot;user&quot;: {&quot;name&quot;: &quot;Alice&quot;},
+            &quot;orders&quot;: [1, 2, 3]
+        }
+    )
+    assert result == &quot;Alice has 3 orders&quot;
+</code></pre> <h3 id=3-property-tests>3. Property Tests</h3> <p><strong>Purpose</strong>: Verify template properties <strong>Example</strong>:</p> <pre><code class=language-python>@given(st.text(), st.dictionaries(st.text(), st.text()))
+def test_template_properties(template, context):
+    result = render(template, context)
+    assert isinstance(result, str)
+    assert len(result) &gt;= 0
+</code></pre></div> </div> </div> <footer class=col-md-12> <hr> <p>Documentation built with <a href=https://www.mkdocs.org/ >MkDocs</a>.</p> </footer> <script src=../../js/bootstrap.bundle.min.js></script> <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script> <script src=../../js/base.js></script> <script src=../../search/main.js></script> <div class=modal id=mkdocs_search_modal tabindex=-1 role=dialog aria-labelledby=searchModalLabel aria-hidden=true> <div class="modal-dialog modal-lg"> <div class=modal-content> <div class=modal-header> <h4 class=modal-title id=searchModalLabel>Search</h4> <button type=button class=btn-close data-bs-dismiss=modal aria-label=Close></button> </div> <div class=modal-body> <p>From here you can search these documents. Enter your search terms below.</p> <form> <div class=form-group> <input type=search class=form-control placeholder=Search... id=mkdocs-search-query title="Type search term here"> </div> </form> <div id=mkdocs-search-results data-no-results-text="No results found"></div> </div> <div class=modal-footer> </div> </div> </div> </div><div class=modal id=mkdocs_keyboard_modal tabindex=-1 role=dialog aria-labelledby=keyboardModalLabel aria-hidden=true> <div class=modal-dialog> <div class=modal-content> <div class=modal-header> <h4 class=modal-title id=keyboardModalLabel>Keyboard Shortcuts</h4> <button type=button class=btn-close data-bs-dismiss=modal aria-label=Close></button> </div> <div class=modal-body> <table class=table> <thead> <tr> <th style="width: 20%;">Keys</th> <th>Action</th> </tr> </thead> <tbody> <tr> <td class="help shortcut"><kbd>?</kbd></td> <td>Open this help</td> </tr> <tr> <td class="next shortcut"><kbd>n</kbd></td> <td>Next page</td> </tr> <tr> <td class="prev shortcut"><kbd>p</kbd></td> <td>Previous page</td> </tr> <tr> <td class="search shortcut"><kbd>s</kbd></td> <td>Search</td> </tr> </tbody> </table> </div> <div class=modal-footer> </div> </div> </div> </div> </body> </html> 
