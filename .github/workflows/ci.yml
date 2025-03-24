@@ -12,6 +12,12 @@ on:
   release:
     types: [created]
 
+# Set permissions for the workflow, especially for the docs/github pages job
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 # Workflow jobs
 jobs:
   # Base job that installs dependencies and sets up the environment
