@@ -210,11 +210,12 @@ jobs:
       - name: Build documentation
         run: poetry run mkdocs build
 
-      - name: Deploy documentation to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: site
+      # Deployment to GitHub Pages is now handled in static.yml
+      # - name: Deploy documentation to GitHub Pages
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: site
 
   # Notification job that runs after all other jobs
   notify:
