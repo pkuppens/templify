@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "markdown-link-check": "^3.11.2"
+  },
+  "scripts": {
+    "validate:docs": "markdown-link-check docs/**/*.md"
+  }
+}

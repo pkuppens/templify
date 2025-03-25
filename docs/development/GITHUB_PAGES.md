@@ -1,7 +1,13 @@
-# GitHub Pages Documentation Guide
+# GitHub Pages Documentation
 
 ## Overview
-GitHub Pages is a static site hosting service that takes files directly from a GitHub repository and publishes a website. It's perfect for project documentation, as it supports Markdown files and can be automatically updated through CI/CD pipelines.
+
+GitHub Pages automatically renders Markdown files into static HTML pages that will be placed at
+https://pkuppens.github.io/templify
+
+No additional build tools are required.
+
+## Structure
 
 ## How It Works
 1. GitHub Pages can serve content from:
