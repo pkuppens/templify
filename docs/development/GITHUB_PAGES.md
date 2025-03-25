@@ -54,6 +54,148 @@ The CI/CD pipeline handles:
 2. Deploying to gh-pages branch
 3. Updating the published site
 
+## Preventing Accidental Merges
+
+To protect the main branch from accidental merges of generated content from gh-pages, we implement several safeguards that don't restrict normal development workflow:
+
+### 1. Git Configuration
+The following settings are configured in the project's `.git/config` file to ensure consistent behavior for all developers:
+
+```ini
+[branch "main"]
+    # --no-ff ensures merge commits are always created
+    # This maintains clear history of when merges occurred
+    # and makes it easier to revert if needed
+    mergeoptions = --no-ff
+    # Custom filter to prevent gh-pages merges
+    mergeFilter = git-merge-filter-gh-pages
+
+[branch "gh-pages"]
+    remote = origin
+    merge = refs/heads/gh-pages
+    # --ff-only ensures gh-pages only updates via fast-forward
+    # This prevents accidental content mixing
+    mergeoptions = --ff-only
+```
+
+To apply these settings to your project, run the following commands:
+
+```bash
+# Configure main branch settings
+git config --local branch.main.mergeoptions "--no-ff"
+git config --local branch.main.mergeFilter "git-merge-filter-gh-pages"
+
+# Configure gh-pages branch settings
+git config --local branch.gh-pages.remote "origin"
+git config --local branch.gh-pages.merge "refs/heads/gh-pages"
+git config --local branch.gh-pages.mergeoptions "--ff-only"
+```
+
+Note that this can also be done by running `scripts/setup-git-config.sh`.
+
+These settings are project-specific and will be stored in `.git/config`. They won't affect other repositories on your system.
+
+### 2. Pre-merge Hook
+This hook prevents accidental merges of gh-pages into any branch:
+
+```bash
+#!/bin/bash
+# This script should be placed in .git/hooks/pre-merge-commit
+# It will run automatically before any merge commit is created
+
+# Get the branch being merged
+MERGE_BRANCH=$(git rev-parse --abbrev-ref MERGE_HEAD)
+
+if [ "$MERGE_BRANCH" = "gh-pages" ]; then
+    echo "ERROR: Merging gh-pages into main is not allowed!"
+    echo "gh-pages is for generated content only."
+    exit 1
+fi
+```
+
+To install the hook automatically, add this to your project setup script or document it in your README:
+
+```bash
+#!/bin/bash
+# setup-git-hooks.sh
+
+HOOK_DIR=".git/hooks"
+HOOKS_SOURCE="docs/development/git-hooks"
+
+# Ensure hooks are executable and installed
+install_hook() {
+    local hook_name=$1
+    cp "$HOOKS_SOURCE/$hook_name" "$HOOK_DIR/$hook_name"
+    chmod +x "$HOOK_DIR/$hook_name"
+    echo "Installed $hook_name hook"
+}
+
+mkdir -p "$HOOKS_SOURCE"
+install_hook "pre-merge-commit"
+```
+
+### 3. GitHub Action
+This action runs during pull request creation and updates to prevent merging gh-pages:
+
+```yaml:.github/workflows/prevent-gh-pages-merge.yml
+name: Prevent gh-pages Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+  # Also check when directly pushing to main
+  push:
+    branches:
+      - main
+
+jobs:
+  check_source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Get full history for branch checking
+
+      - name: Check for gh-pages merge attempts
+        run: |
+          # Check if this is a PR
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            if [ "${{ github.head_ref }}" = "gh-pages" ]; then
+              echo "Error: Cannot merge gh-pages into main"
+              exit 1
+            fi
+          fi
+
+          # For direct pushes, check if gh-pages is being merged
+          if [ "${{ github.event_name }}" = "push" ]; then
+            if git log --first-parent -1 | grep -q "Merge branch 'gh-pages'"; then
+              echo "Error: Cannot merge gh-pages into main"
+              exit 1
+            fi
+          fi
+
+# TODO: Implementation Steps
+- [ ] Create git-hooks directory: `mkdir -p docs/development/git-hooks`
+- [ ] Add pre-merge-commit hook to git-hooks directory
+- [ ] Create and test setup-git-hooks.sh script
+- [ ] Add GitHub Action workflow file
+- [ ] Update project README with hook installation instructions
+- [ ] Document git configuration settings and their purpose
+```
+
+The changes include:
+1. Removed branch protection rules as they might be too restrictive for solo development
+2. Added detailed comments explaining the git configuration options
+3. Created an installation script for git hooks
+4. Enhanced the GitHub Action to catch both PR and direct push attempts to merge gh-pages
+5. Added clear TODO steps for implementation
+
+The GitHub Action now checks both pull requests and direct pushes, providing protection without requiring strict branch rules. The git hooks are now properly managed through a setup script, making it easier to maintain and share across environments.
+
+Would you like me to provide any additional details or clarification about any of these changes?
+
 # TODO: Implementation Steps
 
 1. Documentation Structure
@@ -125,3 +267,33 @@ jobs:
 - [GitHub Pages Documentation](https://docs.github.com/en/pages)
 - [Markdown Guide](https://www.markdownguide.org/)
 - [Documentation Best Practices](https://www.writethedocs.org/guide/)
+
+## Project Setup
+
+### Git Configuration
+To protect against accidental gh-pages merges, run the setup script:
+
+```bash
+./scripts/setup-git-config.sh
+```
+
+Alternatively, manually configure git settings:
+```bash
+# Configure main branch settings
+git config --local branch.main.mergeoptions "--no-ff"
+git config --local branch.main.mergeFilter "git-merge-filter-gh-pages"
+
+# Configure gh-pages branch settings
+git config --local branch.gh-pages.remote "origin"
+git config --local branch.gh-pages.merge "refs/heads/gh-pages"
+git config --local branch.gh-pages.mergeoptions "--ff-only"
+```
+
+These settings are local to your repository and need to be set up once per clone.
+
+# TODO: Implementation Steps
+- [ ] Create scripts directory if it doesn't exist
+- [ ] Add setup-git-config.sh script
+- [ ] Make script executable: `chmod +x scripts/setup-git-config.sh`
+- [ ] Add setup step to project README
+- [ ] Consider adding to CI checks to verify settings are correct

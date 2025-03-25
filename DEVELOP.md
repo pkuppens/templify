@@ -145,7 +145,7 @@ templify/
    ```bash
    # On Ubuntu/Debian
    sudo apt install python3.12-venv
-   
+
    # On macOS
    brew link python@3.12
    ```
