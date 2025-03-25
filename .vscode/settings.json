@@ -1,7 +1,12 @@
 {
     "python.testing.pytestArgs": [
-        "tests"
+        "tests",
+        "-v",
+        "--tb=short"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "python.testing.autoTestDiscoverOnSaveEnabled": true,
+    "python.debugger.autoAttachChildProcesses": true,
+    "python.testing.debugger": "debugpy"
 }

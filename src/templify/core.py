@@ -16,7 +16,8 @@ from typing import Any, Optional, Union
 import jmespath
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import Paragraph, SimpleDocTemplate, getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph, SimpleDocTemplate
 
 
 def get_value_from_path(obj: dict[str, Any], path: str) -> Any:
@@ -145,14 +146,27 @@ def render_jmespath_template(template: str, context: dict[str, Any]) -> str:
     """
     def replace_jmespath(match: re.Match) -> str:
         expr = match.group(1).strip()
-        if not expr.startswith('products | jmespath("'):
+
+        # Handle simple variable references (e.g., {{ name }})
+        if '|' not in expr:
+            return str(get_value_from_path(context, expr))
+
+        # Handle JMESPath expressions
+        parts = expr.split('|')
+        if len(parts) != 2 or not parts[1].strip().startswith('jmespath('):
             raise ValueError(f"Invalid JMESPath expression: {expr}")
 
-        # Extract the actual JMESPath expression
-        jmespath_expr = expr[len('products | jmespath("'):-2]
+        # Extract the data path and JMESPath expression
+        data_path = parts[0].strip()
+        jmespath_expr = parts[1].strip()[9:-2]  # Remove 'jmespath("' and '")'
+
+        # Get the data to query
+        data = get_value_from_path(context, data_path)
+        if data == data_path:
+            raise ValueError(f"Data not found: {data_path}")
 
         # Execute the query
-        result = execute_jmespath_query(jmespath_expr, context['products'])
+        result = execute_jmespath_query(jmespath_expr, data)
         return str(result)
 
     pattern = r'\{\{([^}]+)\}\}'
@@ -160,7 +174,7 @@ def render_jmespath_template(template: str, context: dict[str, Any]) -> str:
 
 
 def render_jinja2(
-    template: str,
+    template: Union[str, Path],
     context: dict[str, Any],
     templates: dict[str, str] | None = None,
     filters: dict[str, Any] | None = None
@@ -169,7 +183,7 @@ def render_jinja2(
     Render a Jinja2 template.
 
     Args:
-        template: The Jinja2 template string
+        template: The Jinja2 template string or path to template file
         context: Dictionary containing values for template variables
         templates: Optional dictionary of template names to template strings for inheritance
         filters: Optional dictionary of custom filters to register
@@ -231,6 +245,11 @@ def render_jinja2(
 
     # Create and render the template
     try:
+        # If template is a Path, read its contents
+        if isinstance(template, Path):
+            with open(template, 'r') as f:
+                template = f.read()
+
         template_obj = env.from_string(template)
         return template_obj.render(**context)
     except Exception as e:
