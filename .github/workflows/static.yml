@@ -8,6 +8,9 @@ on:
     paths:
       - 'docs/**'
       - 'static/**'
+      - 'mkdocs.yml'
+      - 'pyproject.toml'
+      - 'poetry.lock'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -30,6 +33,32 @@ jobs:
       # Checkout the repository content
       - uses: actions/checkout@v4
 
+      # Setup Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      # Install Poetry
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.7.1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      # Load cached venv
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+      # Install dependencies
+      - name: Install dependencies
+        run: poetry install --with dev
+
       # Validate all markdown links in docs directory
       - name: Validate Markdown Links
         uses: gaurav-nelson/github-action-markdown-link-check@v1
@@ -43,6 +72,14 @@ jobs:
             echo "Error: docs/index.md is missing!"
             exit 1
           fi
+
+      # Build documentation
+      - name: Build documentation
+        run: poetry run mkdocs build --strict
+
+      # Create .nojekyll file
+      - name: Create .nojekyll file
+        run: touch site/.nojekyll
 
   # Deploy documentation to GitHub Pages
   deploy:
@@ -58,14 +95,14 @@ jobs:
 
       # Setup GitHub Pages configuration
       - name: Setup Pages
-        uses: actions/configure-pages@v5  # Using latest v5 as per your current config
+        uses: actions/configure-pages@v5
 
       # Upload documentation as artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire docs directory
-          path: './docs'
+          # Upload the built site
+          path: './site'
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages

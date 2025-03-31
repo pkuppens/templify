@@ -1,7 +1,7 @@
 site_name: Templify
 site_description: A powerful templating library that supports multiple template formats and data structures
 theme:
-  name: mkdocs
+  name: material
   features:
     - navigation.tabs
     - navigation.sections
@@ -45,6 +45,11 @@ markdown_extensions:
   - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.tilde
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 nav:
   - Home: README.md

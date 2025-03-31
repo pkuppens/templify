@@ -297,7 +297,7 @@ for batch in user_batches:
 ```python
 # Sandboxed template execution
 template = """
-{% import os %}
+{% raw %}{% import os %}{% endraw %}
 {{ os.system('rm -rf /') }}
 """
 # Raises SecurityError: Import of 'os' not allowed
