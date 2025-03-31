@@ -9,24 +9,17 @@ This module provides the main templating functionality including:
 - PDF document templating
 """
 
-from enum import Enum
-from pathlib import Path
-from typing import Any, Union, Optional
 import re
 import xml.etree.ElementTree as ET
+from enum import Enum
+from pathlib import Path
+from typing import Any, Optional, Union
 
 import jmespath
-from jinja2 import (
-    Environment, 
-    FileSystemLoader, 
-    StrictUndefined, 
-    UndefinedError, 
-    select_autoescape,
-    DebugUndefined
-)
+from jinja2 import DebugUndefined, Environment, FileSystemLoader, StrictUndefined, UndefinedError, select_autoescape
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph, SimpleDocTemplate
 
 from .utils import get_value_from_path
 
@@ -44,27 +37,27 @@ class DefaultUndefined(StrictUndefined):
         name = str(self._undefined_name)
         if '_num' in name or '_number' in name:
             return "0"
-        elif '_list' in name or '_array' in name:
+        if '_list' in name or '_array' in name:
             return "[]"
-        elif '_bool' in name or '_boolean' in name:
+        if '_bool' in name or '_boolean' in name:
             return "False"
         return ""
-    
+
     def __int__(self):
         return 0
-    
+
     def __float__(self):
         return 0.0
-    
+
     def __list__(self):
         return []
-    
+
     def __bool__(self):
         return False
 
 
 def render_text(
-    template: str, 
+    template: str,
     context: dict[str, Any],
     handle_missing: MissingKeyHandling = MissingKeyHandling.KEEP
 ) -> str:
@@ -87,24 +80,23 @@ def render_text(
     def replace_placeholder(match: re.Match) -> str:
         placeholder = match.group(1)
         value = get_value_from_path(context, placeholder)
-        
+
         if value == placeholder:  # Key not found
             if handle_missing == MissingKeyHandling.KEEP:
                 return f"{{{placeholder}}}"
-            elif handle_missing == MissingKeyHandling.DEFAULT:
+            if handle_missing == MissingKeyHandling.DEFAULT:
                 # Try to infer type from placeholder name
                 if '_num' in placeholder or '_number' in placeholder:
                     return "0"
-                elif '_list' in placeholder or '_array' in placeholder:
+                if '_list' in placeholder or '_array' in placeholder:
                     return "[]"
-                elif '_bool' in placeholder or '_boolean' in placeholder:
+                if '_bool' in placeholder or '_boolean' in placeholder:
                     return "False"
-                else:
-                    return ""
-            else:  # RAISE
-                raise ValueError(
-                    f"Missing required template variable: {placeholder}"
-                )
+                return ""
+            # RAISE
+            raise ValueError(
+                f"Missing required template variable: {placeholder}"
+            )
         return str(value)
 
     pattern = r'\{([^}]+)\}'
@@ -135,7 +127,7 @@ def execute_jmespath_query(query: str, data: Any) -> Any:
 
 
 def render_jmespath_template(
-    template: str, 
+    template: str,
     context: dict[str, Any],
     handle_missing: MissingKeyHandling = MissingKeyHandling.KEEP
 ) -> str:
@@ -159,12 +151,12 @@ def render_jmespath_template(
             if value == expr:  # Key not found
                 if handle_missing == MissingKeyHandling.KEEP:
                     return f"{{{{ {expr} }}}}"
-                elif handle_missing == MissingKeyHandling.DEFAULT:
+                if handle_missing == MissingKeyHandling.DEFAULT:
                     return ""
-                else:  # RAISE
-                    raise ValueError(
-                        f"Missing required template variable: {expr}"
-                    )
+                # RAISE
+                raise ValueError(
+                    f"Missing required template variable: {expr}"
+                )
             return str(value)
 
         # Handle JMESPath expressions
@@ -181,12 +173,12 @@ def render_jmespath_template(
         if data == data_path:  # Key not found
             if handle_missing == MissingKeyHandling.KEEP:
                 return f"{{{{ {expr} }}}}"
-            elif handle_missing == MissingKeyHandling.DEFAULT:
+            if handle_missing == MissingKeyHandling.DEFAULT:
                 return ""
-            else:  # RAISE
-                raise ValueError(
-                    f"Missing required template variable: {data_path}"
-                )
+            # RAISE
+            raise ValueError(
+                f"Missing required template variable: {data_path}"
+            )
 
         # Execute the query
         result = execute_jmespath_query(jmespath_expr, data)
@@ -214,12 +206,12 @@ def render_data(
     """
     if isinstance(data, dict):
         return {
-            k: render_data(v, context, handle_missing) 
+            k: render_data(v, context, handle_missing)
             for k, v in data.items()
         }
     if isinstance(data, list):
         return [
-            render_data(item, context, handle_missing) 
+            render_data(item, context, handle_missing)
             for item in data
         ]
     if isinstance(data, str):
@@ -293,7 +285,7 @@ def render_jinja2(
         return template_obj.render(**context)
     except UndefinedError as e:
         if handle_missing == MissingKeyHandling.RAISE:
-            raise ValueError(f"Missing required template variable: {str(e)}")
+            raise ValueError(f"Missing required template variable: {e!s}")
         return str(template)
 
 

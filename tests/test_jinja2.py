@@ -7,12 +7,7 @@ from typing import Any, Dict
 
 import pytest
 
-from templify.core import (
-    render_text, 
-    render_data, 
-    render_jinja2, 
-    MissingKeyHandling
-)
+from templify.core import MissingKeyHandling, render_data, render_jinja2, render_text
 from tests.utils import create_test_file, get_project_tmp_dir
 
 # Test data used across multiple tests
@@ -95,8 +90,8 @@ def template_with_filters() -> Path:
 
 def test_basic_jinja2_rendering(sample_template: Path) -> None:
     """Test basic Jinja2 template rendering."""
-    # This test verifies that a simple template with one variable 
-    # renders correctly. The template is a file containing 
+    # This test verifies that a simple template with one variable
+    # renders correctly. The template is a file containing
     # "Hello {{ name }}!" and should output "Hello John!"
     result = render_jinja2(sample_template, SAMPLE_CONTEXT)
     assert result == "Hello John!"
@@ -110,7 +105,7 @@ def test_complex_jinja2_rendering(complex_template: Path) -> None:
     # - List iteration
     # - Nested data access
     # - Multiple template blocks
-    # Note that an exact string match is complicated due to the 
+    # Note that an exact string match is complicated due to the
     # newlines and spacing
     result = render_jinja2(complex_template, SAMPLE_CONTEXT)
     assert "Hello John!" in result
@@ -172,15 +167,15 @@ def test_jinja2_missing_simple_key_handling(sample_template: Path) -> None:
 def test_jinja2_missing_key_handling_keep():
     """Test keeping missing keys in templates."""
     result = render_text(
-        "Hello {name}!", 
-        {"invalid": "context"}, 
+        "Hello {name}!",
+        {"invalid": "context"},
         handle_missing=MissingKeyHandling.KEEP
     )
     assert result == "Hello {name}!"
-    
+
     result = render_text(
-        "Hello {{ name }}!", 
-        {"invalid": "context"}, 
+        "Hello {{ name }}!",
+        {"invalid": "context"},
         handle_missing=MissingKeyHandling.KEEP
     )
     assert result == "Hello {{ name }}!"
@@ -196,8 +191,8 @@ def test_jinja2_missing_key_handling_default():
     Boolean: {{ missing_bool }}
     """
     result = render_text(
-        template, 
-        context, 
+        template,
+        context,
         handle_missing=MissingKeyHandling.DEFAULT
     )
     assert "String: " in result
@@ -210,15 +205,15 @@ def test_jinja2_missing_key_handling_raise():
     """Test raising error for missing keys."""
     with pytest.raises(ValueError):
         render_text(
-            "Hello {{ name }}!", 
-            {"invalid": "context"}, 
+            "Hello {{ name }}!",
+            {"invalid": "context"},
             handle_missing=MissingKeyHandling.RAISE
         )
-    
+
     with pytest.raises(ValueError):
         render_text(
-            "Hello {name}!", 
-            {"invalid": "context"}, 
+            "Hello {name}!",
+            {"invalid": "context"},
             handle_missing=MissingKeyHandling.RAISE
         )
 
@@ -227,19 +222,19 @@ def test_jinja2_mixed_template_handling():
     """Test templates with both existing and missing keys."""
     template = "Hello {{ name }}, Age: {{ age }}!"
     context = {"name": "John"}
-    
+
     # Test KEEP behavior
     result = render_text(
-        template, 
-        context, 
+        template,
+        context,
         handle_missing=MissingKeyHandling.KEEP
     )
     assert result == "Hello John, Age: {{ age }}!"
-    
+
     # Test DEFAULT behavior
     result = render_text(
-        template, 
-        context, 
+        template,
+        context,
         handle_missing=MissingKeyHandling.DEFAULT
     )
     assert result == "Hello John, Age: !"
