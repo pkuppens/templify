@@ -47,25 +47,16 @@ markdown_extensions:
   - pymdownx.tilde
 
 nav:
-  - Home: index.md
-  - Getting Started:
-    - Installation: guides/installation.md
-    - Quick Start: guides/quickstart.md
-    - Templates: guides/templates.md
-    - Advanced Usage: guides/advanced.md
-  - API Reference:
-    - Core: api/core.md
-    - Utils: api/utils.md
-    - Extensions: api/extensions.md
+  - Home: README.md
   - Development:
     - Contributing: development/contributing.md
     - Architecture: development/architecture.md
-    - Testing: development/testing.md
-    - Releasing: development/releasing.md
+    - GitHub Pages: development/GITHUB_PAGES.md
   - Reference:
     - Requirements: reference/requirements.md
-    - Changelog: reference/changelog.md
-    - Security: reference/security.md
+    - Implementation Plan: IMPLEMENTATION_PLAN.md
+    - Installation: INSTALL.md
+    - Development Guide: DEVELOP.md
 
 plugins:
   - search
@@ -75,3 +66,4 @@ plugins:
       enable_creation_date: true
       type: datetime
       fallback_to_build_date: true
+      enable_git_follow: false

@@ -23,6 +23,30 @@
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"
             }
+        },
+        {
+            "name": "Build Documentation",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mkdocs",
+            "args": ["build"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Serve Documentation",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mkdocs",
+            "args": ["serve"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "console": "integratedTerminal"
         }
     ]
 }

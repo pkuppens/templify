@@ -44,9 +44,11 @@ result2 = render({
 
 # Jinja2 template
 result3 = render("""
+    {% raw %}
     {% if user.is_admin %}
         Welcome, Administrator {{ user.name }}!
     {% endif %}
+    {% endraw %}
 """, {"user": {"name": "Alice", "is_admin": True}})
 ```
 
@@ -86,10 +88,10 @@ result = render_text(template, context)
 # Complex data transformation
 template = {
     "summary": {
-        "total_sales": "{{ sales | jmespath('sum(@[].amount)') }}",
-        "top_product": "{{ products | jmespath('max_by(@, &revenue).name') }}"
+        "total_sales": "{% raw %}{{ sales | jmespath('sum(@[].amount)') }}{% endraw %}",
+        "top_product": "{% raw %}{{ products | jmespath('max_by(@, &revenue).name') }}{% endraw %}"
     },
-    "recent_orders": "{{ orders | jmespath('sort_by(@, &date)[-3:]') }}"
+    "recent_orders": "{% raw %}{{ orders | jmespath('sort_by(@, &date)[-3:]') }}{% endraw %}"
 }
 
 context = {
@@ -122,12 +124,15 @@ context = {
 ```python
 # Template inheritance
 base_template = """
+{% raw %}
 {% block content %}
     Welcome, {{ user.name }}!
 {% endblock %}
+{% endraw %}
 """
 
 child_template = """
+{% raw %}
 {% extends "base" %}
 {% block content %}
     {{ super() }}
@@ -136,6 +141,7 @@ child_template = """
         - {{ activity.type }}: {{ activity.description }}
     {% endfor %}
 {% endblock %}
+{% endraw %}
 """
 
 # Custom filter
@@ -144,7 +150,7 @@ def format_currency(value):
     return f"${value:,.2f}"
 
 # Usage
-template = "Total: {{ amount | format_currency }}"
+template = "Total: {% raw %}{{ amount | format_currency }}{% endraw %}"
 context = {"amount": 1234.56}
 ```
 

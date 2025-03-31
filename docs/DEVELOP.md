@@ -149,6 +149,7 @@ templify/
 
 ## Additional Information
 
-- [README.md](README.md)
+See the [README](README.md) for more information about the project.
+
 - [INSTALL.md](INSTALL.md)
 - [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)

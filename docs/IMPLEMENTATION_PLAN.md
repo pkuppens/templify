@@ -30,7 +30,7 @@ Follow the tasks and subtasks listed below to complete the implementation of the
 
 ## Additional Information
 
-- [README.md](README.md)
-- [INSTALL.md](INSTALL.md)
+See the [README](README.md) for more information about the project.
+
 - [DEVELOP.md](DEVELOP.md)
-- [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)
+- [INSTALL.md](INSTALL.md)

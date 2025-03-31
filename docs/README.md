@@ -1,6 +1,10 @@
-# Templify
+# Templify Documentation
 
-A powerful templating library that supports multiple template formats and data structures.
+Welcome to the Templify documentation! This guide will help you understand and use the Templify library effectively.
+
+## Overview
+
+Templify is a powerful templating library that supports multiple template formats and data structures. It provides a unified API for handling various template types, from simple text templates to complex data structures.
 
 ## Features
 
@@ -16,6 +20,20 @@ A powerful templating library that supports multiple template formats and data s
 
 ## Quick Start
 
+For installation and basic usage, see the [Installation Guide](INSTALL.md).
+
+## Documentation Sections
+
+- [Development Guide](DEVELOP.md) - Development setup and guidelines
+- [Contributing](development/contributing.md) - Contributing guidelines
+- [Architecture](development/architecture.md) - System design and components
+- [Requirements](reference/requirements.md) - Project requirements
+- [Implementation Plan](IMPLEMENTATION_PLAN.md) - Project roadmap and implementation details
+
+## Examples
+
+### Basic Text Templates
+
 ```python
 from templify import render_text
 
@@ -24,26 +42,6 @@ context = {"name": "Alice", "count": 5}
 result = render_text(template, context)
 # Result: "Hello, Alice! You have 5 new messages."
 ```
-
-## Installation
-
-```bash
-pip install templify
-```
-
-## Documentation Sections
-
-- [Getting Started](guides/quickstart.md) - Quick start guide and basic usage
-- [Installation](guides/installation.md) - Detailed installation instructions
-- [Templates](guides/templates.md) - Template formats and syntax
-- [Advanced Usage](guides/advanced.md) - Advanced features and patterns
-- [API Reference](api/core.md) - Complete API documentation
-- [Development](development/contributing.md) - Contributing guidelines
-- [Architecture](development/architecture.md) - System design and components
-- [Requirements](reference/requirements.md) - Project requirements
-- [Changelog](reference/changelog.md) - Version history and changes
-
-## Examples
 
 ### Data Structure Templates
 
@@ -75,8 +73,8 @@ result = render_data(template, context)
 from templify import render_data
 
 template = {
-    "summary": 'Top product: {{ products | jmespath("max_by(@, &sales).name") }}',
-    "total": 'Revenue: {{ products | jmespath("sum(@[].revenue)") }}'
+    "summary": '{% raw %}Top product: {{ products | jmespath("max_by(@, &sales).name") }}{% endraw %}',
+    "total": '{% raw %}Revenue: {{ products | jmespath("sum(@[].revenue)") }}{% endraw %}'
 }
 context = {
     "products": [
@@ -93,6 +91,7 @@ result = render_data(template, context)
 from templify import render_jinja2
 
 template = """
+{% raw %}
 {% if user.is_admin %}
     Welcome, Administrator {{ user.name }}!
 {% else %}
@@ -103,6 +102,13 @@ Your recent activity:
 {% for activity in user.recent_activities %}
     - {{ activity.type }}: {{ activity.description }}
 {% endfor %}
+
+{% macro format_date(date) %}
+    {{ date.strftime('%Y-%m-%d') }}
+{% endmacro %}
+
+Last login: {{ format_date(user.last_login) }}
+{% endraw %}
 """
 
 context = {
@@ -112,7 +118,8 @@ context = {
         "recent_activities": [
             {"type": "login", "description": "Logged in from Chrome"},
             {"type": "edit", "description": "Updated profile"}
-        ]
+        ],
+        "last_login": datetime.now()
     }
 }
 result = render_jinja2(template, context)
@@ -124,4 +131,4 @@ We welcome contributions! Please see our [Contributing Guide](development/contri
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details. 

@@ -54,6 +54,6 @@
 
 ## Additional Information
 
-- [README](../README.md)
+See the [README](README.md) for more information about the project.
 - [DEVELOP.md](DEVELOP.md)
 - [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)
