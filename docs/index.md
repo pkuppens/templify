@@ -36,7 +36,6 @@ Check out our [Installation Guide](INSTALL.md) to get started with Templify.
 ## Reference
 
 - [Requirements](reference/requirements.md) - System and dependency requirements
-- [API Documentation](reference/api.md) - Detailed API reference
 
 ## License
 
