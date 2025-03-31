@@ -69,6 +69,10 @@ jobs:
             echo "Error: mkdocs.yml does not exist!"
             exit 1
           fi
+          if [ ! -f docs/theme/404.md ]; then
+            echo "Error: docs/theme/404.md does not exist!"
+            exit 1
+          fi
 
       # Validate markdown links
       - name: Validate Markdown Links
@@ -76,6 +80,8 @@ jobs:
         with:
           folder-path: 'docs'
           check-modified-files-only: true
+          config-file: '.mlc_config.json'
+          exclude-folders: 'docs/theme'
 
       # Build documentation
       - name: Build documentation

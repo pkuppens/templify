@@ -1,26 +1,21 @@
 {
-    "replacementPatterns": [],
-    "ignorePatterns": [
+    "replacementPatterns": [
         {
-            "pattern": "^https://pkuppens\\.github\\.io/templify/"
-        },
-        {
-            "pattern": "^https://github\\.com/pkuppens/templify/settings"
-        },
-        {
-            "pattern": "^https://github\\.com/pkuppens/templify/settings/pages"
-        },
-        {
-            "pattern": "^https://github\\.com/pkuppens/templify/discussions"
+            "pattern": "^/",
+            "replacement": "https://pkuppens.github.io/templify/"
         }
+    ],
+    "ignorePatterns": [
+        "^https://github\\.com/pkuppens/templify/settings",
+        "^https://github\\.com/pkuppens/templify/settings/pages",
+        "^https://pkuppens\\.github\\.io/templify/"
     ],
     "httpHeaders": [
         {
-            "urls": ["https://github.com"],
+            "urls": ["https://pkuppens.github.io/templify/"],
             "headers": {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                "User-Agent": "Mozilla/5.0 (compatible; TemplifyBot/1.0; +https://github.com/pkuppens/templify)"
             }
         }
-    ],
-    "baseUrl": "docs"
+    ]
 }
