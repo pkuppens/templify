@@ -92,6 +92,14 @@ jobs:
             exit 1
           fi
 
+      # Upload site directory as artifact
+      - name: Upload site directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: site/
+          retention-days: 1
+
   deploy:
     needs: validate
     environment:
@@ -104,6 +112,13 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
+      # Download site directory artifact
+      - name: Download site directory
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
