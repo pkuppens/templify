@@ -66,10 +66,10 @@ jobs:
           folder-path: 'docs'
 
       # Ensure the main documentation entry point exists
-      - name: Check index.md exists
+      - name: Check documentation entry point exists
         run: |
-          if [ ! -f docs/index.md ]; then
-            echo "Error: docs/index.md is missing!"
+          if [ ! -f docs/index.md ] && [ ! -f docs/index.rst ]; then
+            echo "Error: Neither docs/index.md nor docs/index.rst exists!"
             exit 1
           fi
 
