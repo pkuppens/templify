@@ -47,6 +47,18 @@
                 "PYTHONPATH": "${workspaceFolder}"
             },
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Validate Documentation",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mkdocs",
+            "args": ["build", "--strict", "--verbose"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "console": "integratedTerminal"
         }
     ]
 }

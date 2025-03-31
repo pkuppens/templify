@@ -3,7 +3,7 @@
 ## Overview
 
 GitHub Pages automatically renders Markdown files into static HTML pages that will be placed at
-https://pkuppens.github.io/templify
+https://github.com/pkuppens/templify
 
 No additional build tools are required.
 
@@ -20,7 +20,7 @@ No additional build tools are required.
    - CI/CD pipeline generates the documentation
    - Generated content is pushed to the gh-pages branch
    - GitHub serves the content from https://<username>.github.io/<repository>
-   - In this case: https://pkuppens.github.io/templify
+   - In this case: https://github.com/pkuppens/templify
 
 ## Documentation Structure
 Best practices for GitHub Pages documentation:

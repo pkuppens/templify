@@ -144,7 +144,7 @@ templify/
 ## Getting Help
 
 - Check the [GitHub Issues](https://github.com/pkuppens/templify/issues)
-- Join our [Discussions](https://github.com/pkuppens/templify/discussions)
+- Join our [Issues](https://github.com/pkuppens/templify/issues)
 - Contact the maintainers
 
 ## Additional Information
