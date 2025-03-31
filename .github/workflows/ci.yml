@@ -12,11 +12,9 @@ on:
   release:
     types: [created]
 
-# Set permissions for the workflow, especially for the docs/github pages job
+# Set permissions for the workflow
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 # Workflow jobs
 jobs:
@@ -176,51 +174,10 @@ jobs:
           poetry build
           poetry publish --username ${{ secrets.PYPI_USERNAME }} --password ${{ secrets.PYPI_PASSWORD }}
 
-  # Job to build and deploy documentation
-  docs:
-    runs-on: ubuntu-latest
-    needs: setup
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12'
-          cache: 'pip'
-
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-      - name: Restore cached dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/pip
-            ~/.cache/pypoetry
-            .venv
-          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-
-      - name: Install dependencies
-        run: poetry install --no-interaction --no-ansi
-
-      - name: Build documentation
-        run: poetry run mkdocs build
-
-      # Deployment to GitHub Pages is now handled in static.yml
-      # - name: Deploy documentation to GitHub Pages
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: site
-
   # Notification job that runs after all other jobs
   notify:
     runs-on: ubuntu-latest
-    needs: [setup, code-quality, test, docker, deploy, docs]
+    needs: [setup, code-quality, test, docker, deploy]
     if: always()  # Ensure this job always runs, even if previous jobs fail
     steps:
       - name: Notify on success

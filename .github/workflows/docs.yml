@@ -1,0 +1,116 @@
+# Documentation generation and deployment workflow
+# Based on GitHub Actions best practices for documentation
+# Reference: https://docs.github.com/en/actions/guides/publishing-docs-with-github-pages
+
+name: Documentation
+
+on:
+  # Run on pushes to main branch that affect documentation
+  push:
+    branches: ["main"]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'pyproject.toml'
+      - 'poetry.lock'
+  # Allow manual trigger
+  workflow_dispatch:
+
+# Set permissions for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.7.1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        run: poetry install --with dev
+
+      # Validate documentation structure
+      - name: Check documentation structure
+        run: |
+          if [ ! -f docs/index.md ]; then
+            echo "Error: docs/index.md does not exist!"
+            exit 1
+          fi
+          if [ ! -f mkdocs.yml ]; then
+            echo "Error: mkdocs.yml does not exist!"
+            exit 1
+          fi
+
+      # Validate markdown links
+      - name: Validate Markdown Links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          folder-path: 'docs'
+          check-modified-files-only: true
+
+      # Build documentation
+      - name: Build documentation
+        run: poetry run mkdocs build --strict
+
+      # Verify build output
+      - name: Verify build output
+        run: |
+          if [ ! -d "site" ]; then
+            echo "Error: Documentation build failed - site directory not created"
+            exit 1
+          fi
+          if [ ! -f "site/index.html" ]; then
+            echo "Error: Documentation build failed - index.html not created"
+            exit 1
+          fi
+
+  deploy:
+    needs: validate
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './site'
+          retention-days: 1
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
