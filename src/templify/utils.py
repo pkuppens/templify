@@ -1,6 +1,26 @@
 """
 Utility functions for Templify
 """
+from typing import Any
+
+
+def get_value_from_path(obj: dict[str, Any], path: str) -> Any:
+    """
+    Get a value from a nested dictionary using a dot-notation path.
+
+    Args:
+        obj: The dictionary to traverse
+        path: The dot-notation path to the value
+
+    Returns:
+        The value at the specified path, or the original path if not found
+    """
+    current = obj
+    for key in path.split('.'):
+        if not isinstance(current, dict):
+            return path
+        current = current.get(key, path)
+    return current
 
 
 def is_placeholder(value: str) -> bool:

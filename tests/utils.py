@@ -9,6 +9,7 @@ from typing import Optional
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def get_project_tmp_dir() -> Path:
     """Get the project's temporary directory for test files.
 
@@ -19,6 +20,7 @@ def get_project_tmp_dir() -> Path:
     tmp_dir = project_root / "tmp"
     tmp_dir.mkdir(exist_ok=True)
     return tmp_dir
+
 
 def create_test_file(
     content: str,
