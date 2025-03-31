@@ -25,6 +25,9 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+  custom_dir: docs/theme
+  static_templates:
+    - 404.md
 
 markdown_extensions:
   - pymdownx.highlight:
