@@ -47,7 +47,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "I", "W", "C4", "RUF", "SIM", "TID", "TCH", "RSE", "RET", "SLF", "ERA", "PD", "PGH", "PL"]
-ignore = []
+ignore = ["SIM108"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["templify"]
