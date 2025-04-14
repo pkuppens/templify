@@ -6,15 +6,15 @@ template logic from business logic.
 """
 
 from examples.ups_shipment_templify import (
+    BASE_SHIPMENT_TEMPLATE,
+    PAYMENT_TEMPLATE,
+    RECIPIENT_TEMPLATE,
+    SERVICE_TEMPLATE,
+    SHIPPER_TEMPLATE,
     create_package_data,
     create_packages_data,
     create_shipment,
     create_shipments,
-    BASE_SHIPMENT_TEMPLATE,
-    SHIPPER_TEMPLATE,
-    RECIPIENT_TEMPLATE,
-    PAYMENT_TEMPLATE,
-    SERVICE_TEMPLATE,
 )
 from templify import render_data
 

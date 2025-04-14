@@ -264,7 +264,7 @@ def render_data(
             return render_text(data, context, handle_missing)
         return data
     # Handle primitive types (int, float, bool, etc.)
-    if isinstance(data, (int, float, bool)):
+    if isinstance(data, int | float | bool):
         return data
     # Handle datetime objects
     if hasattr(data, "isoformat"):

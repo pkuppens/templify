@@ -8,8 +8,8 @@ This module contains tests for the core templating features of Templify:
 4. Binary document (PDF) templating
 5. Edge cases and error handling
 """
-from typing import Any
 from datetime import datetime
+from typing import Any
 
 import pytest
 

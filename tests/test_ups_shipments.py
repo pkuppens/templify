@@ -7,7 +7,7 @@ splitting into multiple shipments.
 """
 
 import json
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 from templify import render_data
 
