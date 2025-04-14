@@ -36,6 +36,6 @@ def test_cli_unimplemented_command():
 @pytest.mark.skip(reason="CLI help flag handling needs to be fixed to use SystemExit correctly")
 def test_main():
     """Test the main CLI function."""
-    with patch('sys.argv', ['templify', '--help']):
+    with patch("sys.argv", ["templify", "--help"]):
         return_code = main()
         assert return_code == 0

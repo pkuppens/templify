@@ -14,92 +14,54 @@ from templify import render_data
 # UPS API payload template with placeholders
 UPS_SHIPMENT_TEMPLATE = {
     "ShipmentRequest": {
-        "Request": {
-            "RequestOption": "nonvalidate",
-            "TransactionReference": {
-                "CustomerContext": "{customer_context}"
-            }
-        },
+        "Request": {"RequestOption": "nonvalidate", "TransactionReference": {"CustomerContext": "{customer_context}"}},
         "Shipment": {
             "Description": "{shipment_description}",
             "Shipper": {
                 "Name": "{shipper_name}",
                 "AttentionName": "{shipper_attention_name}",
                 "TaxIdentificationNumber": "{shipper_tax_id}",
-                "Phone": {
-                    "Number": "{shipper_phone}",
-                    "Extension": "{shipper_phone_ext}"
-                },
+                "Phone": {"Number": "{shipper_phone}", "Extension": "{shipper_phone_ext}"},
                 "ShipperNumber": "{shipper_number}",
                 "Address": {
-                    "AddressLine": [
-                        "{shipper_address_line1}",
-                        "{shipper_address_line2}"
-                    ],
+                    "AddressLine": ["{shipper_address_line1}", "{shipper_address_line2}"],
                     "City": "{shipper_city}",
                     "StateProvinceCode": "{shipper_state}",
                     "PostalCode": "{shipper_postal_code}",
-                    "CountryCode": "{shipper_country_code}"
-                }
+                    "CountryCode": "{shipper_country_code}",
+                },
             },
             "ShipTo": {
                 "Name": "{ship_to_name}",
                 "AttentionName": "{ship_to_attention_name}",
-                "Phone": {
-                    "Number": "{ship_to_phone}",
-                    "Extension": "{ship_to_phone_ext}"
-                },
+                "Phone": {"Number": "{ship_to_phone}", "Extension": "{ship_to_phone_ext}"},
                 "Address": {
-                    "AddressLine": [
-                        "{ship_to_address_line1}",
-                        "{ship_to_address_line2}"
-                    ],
+                    "AddressLine": ["{ship_to_address_line1}", "{ship_to_address_line2}"],
                     "City": "{ship_to_city}",
                     "StateProvinceCode": "{ship_to_state}",
                     "PostalCode": "{ship_to_postal_code}",
-                    "CountryCode": "{ship_to_country_code}"
-                }
+                    "CountryCode": "{ship_to_country_code}",
+                },
             },
             "ShipFrom": {
                 "Name": "{ship_from_name}",
                 "AttentionName": "{ship_from_attention_name}",
-                "Phone": {
-                    "Number": "{ship_from_phone}",
-                    "Extension": "{ship_from_phone_ext}"
-                },
+                "Phone": {"Number": "{ship_from_phone}", "Extension": "{ship_from_phone_ext}"},
                 "Address": {
-                    "AddressLine": [
-                        "{ship_from_address_line1}",
-                        "{ship_from_address_line2}"
-                    ],
+                    "AddressLine": ["{ship_from_address_line1}", "{ship_from_address_line2}"],
                     "City": "{ship_from_city}",
                     "StateProvinceCode": "{ship_from_state}",
                     "PostalCode": "{ship_from_postal_code}",
-                    "CountryCode": "{ship_from_country_code}"
-                }
+                    "CountryCode": "{ship_from_country_code}",
+                },
             },
             "PaymentInformation": {
-                "ShipmentCharge": {
-                    "Type": "{payment_type}",
-                    "BillShipper": {
-                        "AccountNumber": {
-                            "Value": "{account_number}"
-                        }
-                    }
-                }
+                "ShipmentCharge": {"Type": "{payment_type}", "BillShipper": {"AccountNumber": {"Value": "{account_number}"}}}
             },
-            "Service": {
-                "Code": "{service_code}",
-                "Description": "{service_description}"
-            },
-            "Package": "{packages}"
+            "Service": {"Code": "{service_code}", "Description": "{service_description}"},
+            "Package": "{packages}",
         },
-        "LabelSpecification": {
-            "LabelImageFormat": {
-                "Code": "PDF"
-            },
-            "HTTPUserAgent": "Mozilla/4.5"
-        }
+        "LabelSpecification": {"LabelImageFormat": {"Code": "PDF"}, "HTTPUserAgent": "Mozilla/4.5"},
     }
 }
 
@@ -118,7 +80,7 @@ def create_shipper_data() -> dict[str, Any]:
         "shipper_city": "Amsterdam",
         "shipper_state": "NH",
         "shipper_postal_code": "1012AB",
-        "shipper_country_code": "NL"
+        "shipper_country_code": "NL",
     }
 
 
@@ -134,7 +96,7 @@ def create_ship_to_data() -> dict[str, Any]:
         "ship_to_city": "Rotterdam",
         "ship_to_state": "ZH",
         "ship_to_postal_code": "3011GH",
-        "ship_to_country_code": "NL"
+        "ship_to_country_code": "NL",
     }
 
 
@@ -150,7 +112,7 @@ def create_ship_from_data() -> dict[str, Any]:
         "ship_from_city": "Amsterdam",
         "ship_from_state": "NH",
         "ship_from_postal_code": "1012AB",
-        "ship_from_country_code": "NL"
+        "ship_from_country_code": "NL",
     }
 
 
@@ -158,7 +120,7 @@ def create_payment_data() -> dict[str, Any]:
     """Create payment data for the UPS shipment."""
     return {
         "payment_type": "01",  # 01 = Prepaid
-        "account_number": "ABCD1234"
+        "account_number": "ABCD1234",
     }
 
 
@@ -166,45 +128,24 @@ def create_service_data() -> dict[str, Any]:
     """Create service data for the UPS shipment."""
     return {
         "service_code": "01",  # 01 = UPS Next Day Air
-        "service_description": "UPS Next Day Air"
+        "service_description": "UPS Next Day Air",
     }
 
 
-def create_package_data(
-    package_id: int,
-    weight: float,
-    length: float,
-    width: float,
-    height: float
-) -> dict[str, Any]:
+def create_package_data(package_id: int, weight: float, length: float, width: float, height: float) -> dict[str, Any]:
     """Create package data for the UPS shipment."""
     return {
         "PackagingType": {
             "Code": "02",  # 02 = Customer Packaging
-            "Description": "Package"
+            "Description": "Package",
         },
-        "Dimensions": {
-            "UnitOfMeasurement": {
-                "Code": "CM"
-            },
-            "Length": str(length),
-            "Width": str(width),
-            "Height": str(height)
-        },
-        "PackageWeight": {
-            "UnitOfMeasurement": {
-                "Code": "KG"
-            },
-            "Weight": str(weight)
-        },
-        "PackageID": f"Package {package_id}"
+        "Dimensions": {"UnitOfMeasurement": {"Code": "CM"}, "Length": str(length), "Width": str(width), "Height": str(height)},
+        "PackageWeight": {"UnitOfMeasurement": {"Code": "KG"}, "Weight": str(weight)},
+        "PackageID": f"Package {package_id}",
     }
 
 
-def create_packages_data(
-    num_packages: int,
-    start_id: int = 1
-) -> list[dict[str, Any]]:
+def create_packages_data(num_packages: int, start_id: int = 1) -> list[dict[str, Any]]:
     """Create packages data for the UPS shipment."""
     packages = []
     for i in range(num_packages):
@@ -214,9 +155,7 @@ def create_packages_data(
         length = 30.0
         width = 20.0
         height = 15.0
-        packages.append(
-            create_package_data(package_id, weight, length, width, height)
-        )
+        packages.append(create_package_data(package_id, weight, length, width, height))
     return packages
 
 
@@ -228,7 +167,7 @@ def create_shipment_context(
     ship_to_data: dict[str, Any],
     ship_from_data: dict[str, Any],
     payment_data: dict[str, Any],
-    service_data: dict[str, Any]
+    service_data: dict[str, Any],
 ) -> dict[str, Any]:
     """Create the complete context for the UPS shipment."""
     context = {
@@ -239,7 +178,7 @@ def create_shipment_context(
         **ship_to_data,
         **ship_from_data,
         **payment_data,
-        **service_data
+        **service_data,
     }
     return context
 
@@ -252,18 +191,11 @@ def create_ups_shipment(
     ship_to_data: dict[str, Any],
     ship_from_data: dict[str, Any],
     payment_data: dict[str, Any],
-    service_data: dict[str, Any]
+    service_data: dict[str, Any],
 ) -> dict[str, Any]:
     """Create a complete UPS shipment payload."""
     context = create_shipment_context(
-        customer_context,
-        shipment_description,
-        packages,
-        shipper_data,
-        ship_to_data,
-        ship_from_data,
-        payment_data,
-        service_data
+        customer_context, shipment_description, packages, shipper_data, ship_to_data, ship_from_data, payment_data, service_data
     )
 
     return render_data(UPS_SHIPMENT_TEMPLATE, context)
@@ -278,7 +210,7 @@ def create_multiple_shipments(
     ship_to_data: dict[str, Any] = None,
     ship_from_data: dict[str, Any] = None,
     payment_data: dict[str, Any] = None,
-    service_data: dict[str, Any] = None
+    service_data: dict[str, Any] = None,
 ) -> list[dict[str, Any]]:
     """
     Create multiple UPS shipments when the total number of packages exceeds the limit.
@@ -331,7 +263,7 @@ def create_multiple_shipments(
             ship_to_data,
             ship_from_data,
             payment_data,
-            service_data
+            service_data,
         )
 
         shipments.append(shipment)
@@ -347,11 +279,7 @@ def main():
     total_packages = 30
 
     # Create shipments
-    shipments = create_multiple_shipments(
-        customer_context,
-        shipment_description,
-        total_packages
-    )
+    shipments = create_multiple_shipments(customer_context, shipment_description, total_packages)
 
     # Display results
     print(f"Number of shipments: {len(shipments)}")
