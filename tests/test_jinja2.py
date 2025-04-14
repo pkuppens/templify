@@ -3,12 +3,11 @@ Tests for Jinja2 template rendering functionality.
 """
 
 from pathlib import Path
-from typing import Any, Dict
 
 import pytest
 
 from templify.core import MissingKeyHandling, render_data, render_jinja2, render_text
-from tests.utils import create_test_file, get_project_tmp_dir
+from tests.utils import create_test_file
 
 # Test data used across multiple tests
 # Contains a mix of simple values, lists, and nested dictionaries

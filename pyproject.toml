@@ -42,23 +42,58 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+# Increase line length to 132 characters
 line-length = 132
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Assume Python 3.12
 target-version = "py312"
 
 [tool.ruff.lint]
-select = ["E", "I", "W", "C4", "RUF", "SIM", "TID", "TCH", "RSE", "RET", "SLF", "ERA", "PD", "PGH", "PL"]
-ignore = ["SIM108"]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+select = ["E", "F", "I", "N", "W", "B", "C4", "UP", "RUF", "PL"]
+
+# Allow up to 9 parameters in function definitions
+extend-select = ["PLR0913"]
+ignore = ["PLR0913"]
+
+# Allow magic numbers in tests, implicit Optional in type hints, and unnecessary assignment before return
+extend-ignore = ["PLR2004", "RUF013", "RET504", "UP035", "UP006", "N817", "UP007", "B904"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["templify"]
 
-[tool.ruff.lint.mccabe]
-max-complexity = 10
-
 [tool.ruff.lint.per-file-ignores]
+# Ignore imported but unused in __init__.py files
 "__init__.py" = ["F401"]
-"tests/*" = ["S101"]
-"src/templify/core.py" = ["PLR2004"]
 
 [tool.mypy]
 python_version = "3.9"

@@ -251,7 +251,7 @@ class TestPDFTemplating:
         """Test basic PDF template rendering with placeholders."""
         output_path = tmp_path / "output.pdf"
 
-        with open(sample_pdf_template, 'r') as f:
+        with open(sample_pdf_template) as f:
             template = f.read()
 
         render_pdf(template, sample_invoice_context, str(output_path))

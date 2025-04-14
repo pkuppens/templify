@@ -16,7 +16,14 @@ from pathlib import Path
 from typing import Any, Optional, Union
 
 import jmespath
-from jinja2 import DebugUndefined, Environment, FileSystemLoader, StrictUndefined, UndefinedError, select_autoescape
+from jinja2 import (
+    DebugUndefined,
+    Environment,
+    FileSystemLoader,
+    StrictUndefined,
+    UndefinedError,
+    select_autoescape,
+)
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, SimpleDocTemplate
