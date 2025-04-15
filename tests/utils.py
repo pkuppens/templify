@@ -3,7 +3,6 @@
 import logging
 import os
 from pathlib import Path
-from typing import Optional
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -26,7 +25,7 @@ def create_test_file(
     content: str,
     prefix: str = "test",
     suffix: str = ".txt",
-    tmp_dir: Optional[Path] = None,
+    tmp_dir: Path | None = None,
 ) -> Path:
     """Create a test file with the given content.
 

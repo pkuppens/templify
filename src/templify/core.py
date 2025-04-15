@@ -13,7 +13,7 @@ import re
 import xml.etree.ElementTree as ET
 from enum import Enum
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 
 import jmespath
 from jinja2 import (
@@ -273,7 +273,7 @@ def render_data(
 
 
 def render_jinja2(
-    template: Union[str, Path],
+    template: str | Path,
     context: dict[str, Any],
     templates: dict[str, str] | None = None,
     filters: dict[str, Any] | None = None,
@@ -328,7 +328,7 @@ def render_jinja2(
         return template_obj.render(**context)
     except UndefinedError as e:
         if handle_missing == MissingKeyHandling.RAISE:
-            raise ValueError(f"Missing required template variable: {e!s}")
+            raise ValueError(f"Missing required template variable: {e!s}") from e
         return str(template)
 
 

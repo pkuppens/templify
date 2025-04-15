@@ -81,18 +81,23 @@ target-version = "py312"
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
 select = ["E", "F", "I", "N", "W", "B", "C4", "UP", "RUF", "PL"]
 
-# Suppress specific rules
+# Suppress specific rules, grouped by category
 ignore = [
+    # Code structure and complexity
+    "PLR0911",  # Too many return statements (max 8)
     "PLR0913",  # Too many arguments to function call
-    "PLR2004",  # Magic numbers in tests
+
+    # Type hints and imports
+    "N817",     # CamelCase imported as acronym (ElementTree as ET)
     "RUF013",   # Implicit Optional in type hints
+
+    # Code style and readability
     "RET504",   # Unnecessary assignment before return
     "UP035",    # Unnecessary assignment before return
     "UP006",    # Use tuple instead of list for static values
-    "N817",     # Camelcase imported as lowercase
-    "UP007",    # Use X | Y for union types
-    "B904",     # Use 'raise from' instead of bare raise
-    "PLR0911",  # Too many return statements (max 8)
+
+    # Test-specific
+    "PLR2004",  # Magic numbers in tests
 ]
 
 [tool.ruff.lint.isort]
