@@ -13,10 +13,17 @@ import re
 import xml.etree.ElementTree as ET
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 import jmespath
-from jinja2 import DebugUndefined, Environment, FileSystemLoader, StrictUndefined, UndefinedError, select_autoescape
+from jinja2 import (
+    DebugUndefined,
+    Environment,
+    FileSystemLoader,
+    StrictUndefined,
+    UndefinedError,
+    select_autoescape,
+)
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, SimpleDocTemplate
@@ -26,6 +33,7 @@ from .utils import get_value_from_path
 
 class MissingKeyHandling(Enum):
     """Enum for handling missing keys in templates."""
+
     KEEP = "keep"  # Keep the placeholder as is
     DEFAULT = "default"  # Use default value based on type
     RAISE = "raise"  # Raise ValueError (default Jinja2 behavior)
@@ -33,13 +41,14 @@ class MissingKeyHandling(Enum):
 
 class DefaultUndefined(StrictUndefined):
     """Custom Undefined class that returns default values based on type."""
+
     def __str__(self):
         name = str(self._undefined_name)
-        if '_num' in name or '_number' in name:
+        if "_num" in name or "_number" in name:
             return "0"
-        if '_list' in name or '_array' in name:
+        if "_list" in name or "_array" in name:
             return "[]"
-        if '_bool' in name or '_boolean' in name:
+        if "_bool" in name or "_boolean" in name:
             return "False"
         return ""
 
@@ -56,27 +65,48 @@ class DefaultUndefined(StrictUndefined):
         return False
 
 
-def render_text(
-    template: str,
-    context: dict[str, Any],
-    handle_missing: MissingKeyHandling = MissingKeyHandling.KEEP
-) -> str:
+def render_text(template: str, context: dict[str, Any], handle_missing: MissingKeyHandling = MissingKeyHandling.KEEP) -> Any:
     """
     Render a text template with placeholders.
 
     Args:
-        template: The template string containing placeholders in {placeholder} format
+        template: The template string containing placeholders in
+                 {placeholder} format
         context: Dictionary containing values for placeholders
         handle_missing: How to handle missing keys (KEEP, DEFAULT, or RAISE)
 
     Returns:
-        Rendered string with placeholders replaced
+        Rendered string with placeholders replaced, or the actual value
+        if the template is a single placeholder referencing a dict/list
     """
     # First try jmespath template {{ key }}
-    if '{{' in template and '}}' in template:
+    if "{{" in template and "}}" in template:
         return render_jinja2(template, context, handle_missing=handle_missing)
 
-    # Otherwise, {key} format
+    # If the template is a single placeholder, handle it directly
+    pattern = r"^\{([^}]+)\}$"
+    match = re.match(pattern, template)
+    if match:
+        placeholder = match.group(1)
+        value = get_value_from_path(context, placeholder)
+
+        if value == placeholder:  # Key not found
+            if handle_missing == MissingKeyHandling.KEEP:
+                return f"{{{placeholder}}}"
+            if handle_missing == MissingKeyHandling.DEFAULT:
+                # Try to infer type from placeholder name
+                if "_num" in placeholder or "_number" in placeholder:
+                    return "0"
+                if "_list" in placeholder or "_array" in placeholder:
+                    return "[]"
+                if "_bool" in placeholder or "_boolean" in placeholder:
+                    return "False"
+                return ""
+            # RAISE
+            raise ValueError(f"Missing required template variable: {placeholder}")
+        return value
+
+    # Otherwise, replace all placeholders in the string
     def replace_placeholder(match: re.Match) -> str:
         placeholder = match.group(1)
         value = get_value_from_path(context, placeholder)
@@ -86,20 +116,18 @@ def render_text(
                 return f"{{{placeholder}}}"
             if handle_missing == MissingKeyHandling.DEFAULT:
                 # Try to infer type from placeholder name
-                if '_num' in placeholder or '_number' in placeholder:
+                if "_num" in placeholder or "_number" in placeholder:
                     return "0"
-                if '_list' in placeholder or '_array' in placeholder:
+                if "_list" in placeholder or "_array" in placeholder:
                     return "[]"
-                if '_bool' in placeholder or '_boolean' in placeholder:
+                if "_bool" in placeholder or "_boolean" in placeholder:
                     return "False"
                 return ""
             # RAISE
-            raise ValueError(
-                f"Missing required template variable: {placeholder}"
-            )
+            raise ValueError(f"Missing required template variable: {placeholder}")
         return str(value)
 
-    pattern = r'\{([^}]+)\}'
+    pattern = r"\{([^}]+)\}"
     return re.sub(pattern, replace_placeholder, template)
 
 
@@ -127,9 +155,7 @@ def execute_jmespath_query(query: str, data: Any) -> Any:
 
 
 def render_jmespath_template(
-    template: str,
-    context: dict[str, Any],
-    handle_missing: MissingKeyHandling = MissingKeyHandling.KEEP
+    template: str, context: dict[str, Any], handle_missing: MissingKeyHandling = MissingKeyHandling.KEEP
 ) -> str:
     """
     Render a template with JMESPath expressions.
@@ -142,11 +168,12 @@ def render_jmespath_template(
     Returns:
         Rendered string with JMESPath expressions evaluated
     """
+
     def replace_jmespath(match: re.Match) -> str:
         expr = match.group(1).strip()
 
         # Handle simple variable references (e.g., {{ name }})
-        if '|' not in expr:
+        if "|" not in expr:
             value = get_value_from_path(context, expr)
             if value == expr:  # Key not found
                 if handle_missing == MissingKeyHandling.KEEP:
@@ -154,14 +181,12 @@ def render_jmespath_template(
                 if handle_missing == MissingKeyHandling.DEFAULT:
                     return ""
                 # RAISE
-                raise ValueError(
-                    f"Missing required template variable: {expr}"
-                )
+                raise ValueError(f"Missing required template variable: {expr}")
             return str(value)
 
         # Handle JMESPath expressions
-        parts = expr.split('|')
-        if len(parts) != 2 or not parts[1].strip().startswith('jmespath('):
+        parts = expr.split("|")
+        if len(parts) != 2 or not parts[1].strip().startswith("jmespath("):
             raise ValueError(f"Invalid JMESPath expression: {expr}")
 
         # Extract the data path and JMESPath expression
@@ -176,22 +201,44 @@ def render_jmespath_template(
             if handle_missing == MissingKeyHandling.DEFAULT:
                 return ""
             # RAISE
-            raise ValueError(
-                f"Missing required template variable: {data_path}"
-            )
+            raise ValueError(f"Missing required template variable: {data_path}")
 
         # Execute the query
         result = execute_jmespath_query(jmespath_expr, data)
         return str(result)
 
-    pattern = r'\{\{([^}]+)\}\}'
+    pattern = r"\{\{([^}]+)\}\}"
     return re.sub(pattern, replace_jmespath, template)
 
 
+def is_placeholder(text: str) -> bool:
+    """
+    Check if a string is a placeholder.
+
+    Args:
+        text: String to check
+
+    Returns:
+        True if the string is a placeholder, False otherwise
+    """
+    return text.startswith("${") and text.endswith("}")
+
+
+def extract_placeholder_value(text: str) -> str:
+    """
+    Extract the value from a placeholder.
+
+    Args:
+        text: Placeholder string (e.g. ${value})
+
+    Returns:
+        The value inside the placeholder
+    """
+    return text[2:-1]
+
+
 def render_data(
-    data: dict[str, Any] | list,
-    context: dict[str, Any],
-    handle_missing: MissingKeyHandling = MissingKeyHandling.KEEP
+    data: dict[str, Any] | list, context: dict[str, Any], handle_missing: MissingKeyHandling = MissingKeyHandling.KEEP
 ) -> dict[str, Any] | list:
     """
     Recursively render placeholders in a data structure.
@@ -205,21 +252,23 @@ def render_data(
         Data structure with placeholders replaced
     """
     if isinstance(data, dict):
-        return {
-            k: render_data(v, context, handle_missing)
-            for k, v in data.items()
-        }
+        return {k: render_data(v, context, handle_missing) for k, v in data.items()}
     if isinstance(data, list):
-        return [
-            render_data(item, context, handle_missing)
-            for item in data
-        ]
+        return [render_data(item, context, handle_missing) for item in data]
     if isinstance(data, str):
         # First try JMESPath template
-        if '{{' in data and '}}' in data:
-            return render_jmespath_template(data, context, handle_missing)
+        if "{{" in data and "}}" in data:
+            return render_jmespath_template(data, context, handle_missing=handle_missing)
         # Then try regular placeholder
-        return render_text(data, context, handle_missing)
+        if "{" in data and "}" in data:
+            return render_text(data, context, handle_missing)
+        return data
+    # Handle primitive types (int, float, bool, etc.)
+    if isinstance(data, int | float | bool):
+        return data
+    # Handle datetime objects
+    if hasattr(data, "isoformat"):
+        return data.isoformat()
     return data
 
 
@@ -228,7 +277,7 @@ def render_jinja2(
     context: dict[str, Any],
     templates: dict[str, str] | None = None,
     filters: dict[str, Any] | None = None,
-    handle_missing: MissingKeyHandling = MissingKeyHandling.KEEP
+    handle_missing: MissingKeyHandling = MissingKeyHandling.KEEP,
 ) -> str:
     """
     Render a Jinja2 template.
@@ -248,26 +297,20 @@ def render_jinja2(
         template_dir = str(template.parent)
         template_name = template.name
     else:
-        template_dir = '.'
+        template_dir = "."
         template_name = None
 
     if handle_missing == MissingKeyHandling.KEEP:
         env = Environment(
-            autoescape=select_autoescape(['html', 'xml']),
-            loader=FileSystemLoader(template_dir),
-            undefined=DebugUndefined
+            autoescape=select_autoescape(["html", "xml"]), loader=FileSystemLoader(template_dir), undefined=DebugUndefined
         )
     elif handle_missing == MissingKeyHandling.DEFAULT:
         env = Environment(
-            autoescape=select_autoescape(['html', 'xml']),
-            loader=FileSystemLoader(template_dir),
-            undefined=DefaultUndefined
+            autoescape=select_autoescape(["html", "xml"]), loader=FileSystemLoader(template_dir), undefined=DefaultUndefined
         )
     else:  # RAISE
         env = Environment(
-            autoescape=select_autoescape(['html', 'xml']),
-            loader=FileSystemLoader(template_dir),
-            undefined=StrictUndefined
+            autoescape=select_autoescape(["html", "xml"]), loader=FileSystemLoader(template_dir), undefined=StrictUndefined
         )
 
     # Register custom filters if provided
@@ -292,18 +335,21 @@ def render_jinja2(
 def render_pdf(
     template: str,
     context: dict[str, Any],
-    output_path: Optional[Union[str, Path]] = None,
-    content: Optional[list[dict[str, Any]]] = None,
+    output_path: Path | str | None = None,
+    content: list[dict[str, Any]] | None = None,
     handle_missing: MissingKeyHandling = MissingKeyHandling.KEEP,
-) -> Union[bytes, Path]:
-    """Render a PDF document from a template.
+) -> bytes | str:
+    """
+    Render a PDF document from an XML template.
 
     Args:
         template: The template string or file path
         context: The context data for template rendering
-        output_path: Optional path to save the PDF (if not provided, returns bytes)
+        output_path: Optional path to save the PDF
+                    (if not provided, returns bytes)
         content: Optional list of content items for the PDF
-        handle_missing: How to handle missing keys (KEEP, DEFAULT, or RAISE)
+        handle_missing: How to handle missing keys
+                       (KEEP, DEFAULT, or RAISE)
 
     Returns:
         The rendered PDF as bytes or the path to the saved file
@@ -314,13 +360,8 @@ def render_pdf(
     # Parse the XML template and create elements
     elements = []
     for elem in ET.fromstring(rendered).iter():
-        if elem.tag == 'text':
-            elements.append(
-                Paragraph(
-                    elem.text or "",
-                    getSampleStyleSheet()["Normal"]
-                )
-            )
+        if elem.tag == "text":
+            elements.append(Paragraph(elem.text or "", getSampleStyleSheet()["Normal"]))
 
     # Create PDF document
     doc = SimpleDocTemplate(
@@ -335,13 +376,15 @@ def render_pdf(
     # Process content if provided
     if content:
         # Convert content to PDF elements
-        elements.extend([
-            Paragraph(
-                str(content_item.get("text", "")),
-                getSampleStyleSheet()["Normal"],
-            )
-            for content_item in content
-        ])
+        elements.extend(
+            [
+                Paragraph(
+                    str(content_item.get("text", "")),
+                    getSampleStyleSheet()["Normal"],
+                )
+                for content_item in content
+            ]
+        )
 
     # Build document from elements
     doc.build(elements)

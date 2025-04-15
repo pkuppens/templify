@@ -16,7 +16,7 @@ def get_value_from_path(obj: dict[str, Any], path: str) -> Any:
         The value at the specified path, or the original path if not found
     """
     current = obj
-    for key in path.split('.'):
+    for key in path.split("."):
         if not isinstance(current, dict):
             return path
         current = current.get(key, path)
@@ -34,10 +34,7 @@ def is_placeholder(value: str) -> bool:
         True if the string is a placeholder, False otherwise
     """
     return isinstance(value, str) and (
-        (value.startswith("{")
-        and value.endswith("}"))
-        or (value.startswith("{{")
-        and value.endswith("}}"))
+        (value.startswith("{") and value.endswith("}")) or (value.startswith("{{") and value.endswith("}}"))
     )
 
 

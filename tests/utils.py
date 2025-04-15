@@ -43,10 +43,11 @@ def create_test_file(
         tmp_dir = get_project_tmp_dir()
 
     import tempfile
+
     fd, path = tempfile.mkstemp(prefix=prefix, suffix=suffix, dir=tmp_dir)
 
     try:
-        with os.fdopen(fd, 'w') as f:
+        with os.fdopen(fd, "w") as f:
             f.write(content)
     finally:
         logger.info(f"Created test file: {path}")

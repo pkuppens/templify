@@ -3,12 +3,11 @@ Tests for Jinja2 template rendering functionality.
 """
 
 from pathlib import Path
-from typing import Any, Dict
 
 import pytest
 
 from templify.core import MissingKeyHandling, render_data, render_jinja2, render_text
-from tests.utils import create_test_file, get_project_tmp_dir
+from tests.utils import create_test_file
 
 # Test data used across multiple tests
 # Contains a mix of simple values, lists, and nested dictionaries
@@ -21,6 +20,7 @@ SAMPLE_CONTEXT = {
         "list": [1, 2, 3],
     },
 }
+
 
 @pytest.fixture
 def sample_greet_template_single() -> Path:
@@ -40,8 +40,9 @@ def sample_template() -> Path:
     return create_test_file(
         "Hello {{ name }}!",  # Simple template with one variable
         prefix="jinja2_sample_",
-        suffix=".j2"
+        suffix=".j2",
     )
+
 
 @pytest.fixture
 def complex_template() -> Path:
@@ -70,7 +71,7 @@ Nested data:
 {% endfor %}
         """,
         prefix="jinja2_complex_",
-        suffix=".j2"
+        suffix=".j2",
     )
 
 
@@ -84,7 +85,7 @@ def template_with_filters() -> Path:
 {{ nested.list | sum }}
         """,
         prefix="jinja2_filters_",
-        suffix=".j2"
+        suffix=".j2",
     )
 
 
@@ -166,18 +167,10 @@ def test_jinja2_missing_simple_key_handling(sample_template: Path) -> None:
 
 def test_jinja2_missing_key_handling_keep():
     """Test keeping missing keys in templates."""
-    result = render_text(
-        "Hello {name}!",
-        {"invalid": "context"},
-        handle_missing=MissingKeyHandling.KEEP
-    )
+    result = render_text("Hello {name}!", {"invalid": "context"}, handle_missing=MissingKeyHandling.KEEP)
     assert result == "Hello {name}!"
 
-    result = render_text(
-        "Hello {{ name }}!",
-        {"invalid": "context"},
-        handle_missing=MissingKeyHandling.KEEP
-    )
+    result = render_text("Hello {{ name }}!", {"invalid": "context"}, handle_missing=MissingKeyHandling.KEEP)
     assert result == "Hello {{ name }}!"
 
 
@@ -190,11 +183,7 @@ def test_jinja2_missing_key_handling_default():
     List: {{ missing_list }}
     Boolean: {{ missing_bool }}
     """
-    result = render_text(
-        template,
-        context,
-        handle_missing=MissingKeyHandling.DEFAULT
-    )
+    result = render_text(template, context, handle_missing=MissingKeyHandling.DEFAULT)
     assert "String: " in result
     assert "Number: 0" in result
     assert "List: []" in result
@@ -204,18 +193,10 @@ def test_jinja2_missing_key_handling_default():
 def test_jinja2_missing_key_handling_raise():
     """Test raising error for missing keys."""
     with pytest.raises(ValueError):
-        render_text(
-            "Hello {{ name }}!",
-            {"invalid": "context"},
-            handle_missing=MissingKeyHandling.RAISE
-        )
+        render_text("Hello {{ name }}!", {"invalid": "context"}, handle_missing=MissingKeyHandling.RAISE)
 
     with pytest.raises(ValueError):
-        render_text(
-            "Hello {name}!",
-            {"invalid": "context"},
-            handle_missing=MissingKeyHandling.RAISE
-        )
+        render_text("Hello {name}!", {"invalid": "context"}, handle_missing=MissingKeyHandling.RAISE)
 
 
 def test_jinja2_mixed_template_handling():
@@ -224,19 +205,11 @@ def test_jinja2_mixed_template_handling():
     context = {"name": "John"}
 
     # Test KEEP behavior
-    result = render_text(
-        template,
-        context,
-        handle_missing=MissingKeyHandling.KEEP
-    )
+    result = render_text(template, context, handle_missing=MissingKeyHandling.KEEP)
     assert result == "Hello John, Age: {{ age }}!"
 
     # Test DEFAULT behavior
-    result = render_text(
-        template,
-        context,
-        handle_missing=MissingKeyHandling.DEFAULT
-    )
+    result = render_text(template, context, handle_missing=MissingKeyHandling.DEFAULT)
     assert result == "Hello John, Age: !"
 
 
@@ -262,7 +235,7 @@ def test_jinja2_with_custom_filters() -> None:
 {{ items | join(' | ')}}
         """,
         prefix="jinja2_custom_filters_",
-        suffix=".j2"
+        suffix=".j2",
     )
     result = render_jinja2(template, SAMPLE_CONTEXT)
     expected = """
@@ -289,7 +262,7 @@ You are under 25
 {% endif %}
         """,
         prefix="jinja2_conditionals_",
-        suffix=".j2"
+        suffix=".j2",
     )
     result = render_jinja2(template, SAMPLE_CONTEXT)
     assert "You are over 25" in result
@@ -308,7 +281,7 @@ Item {{ loop.index }}: {{ item }}
 {% endfor %}
         """,
         prefix="jinja2_loops_",
-        suffix=".j2"
+        suffix=".j2",
     )
     result = render_jinja2(template, SAMPLE_CONTEXT)
     expected = """
@@ -335,7 +308,7 @@ Number: {{ num }}
 {% endfor %}
         """,
         prefix="jinja2_nested_",
-        suffix=".j2"
+        suffix=".j2",
     )
     result = render_jinja2(template, SAMPLE_CONTEXT)
     expected = """

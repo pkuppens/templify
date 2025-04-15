@@ -196,54 +196,21 @@ SAMPLE_CONTEXT: dict[str, Any] = {
         "is_admin": True,
         "notifications": 5,
         "recent_activities": [
-            {
-                "type": "login",
-                "description": "Logged in from Chrome",
-                "timestamp": datetime(2025, 3, 21, 10, 30)
-            },
-            {
-                "type": "edit",
-                "description": "Updated profile",
-                "timestamp": datetime(2025, 3, 21, 11, 15)
-            }
+            {"type": "login", "description": "Logged in from Chrome", "timestamp": datetime(2025, 3, 21, 10, 30)},
+            {"type": "edit", "description": "Updated profile", "timestamp": datetime(2025, 3, 21, 11, 15)},
         ],
         "tasks": [
-            {
-                "title": "Review monthly report",
-                "due_date": datetime(2025, 3, 25)
-            },
-            {
-                "title": "Update documentation",
-                "due_date": datetime(2025, 3, 28)
-            }
-        ]
+            {"title": "Review monthly report", "due_date": datetime(2025, 3, 25)},
+            {"title": "Update documentation", "due_date": datetime(2025, 3, 28)},
+        ],
     },
-    "invoice": {
-        "date": datetime(2025, 3, 21),
-        "amount": 1234.56
-    },
+    "invoice": {"date": datetime(2025, 3, 21), "amount": 1234.56},
     "site_title": "My Dashboard",
     "year": 2025,
-    "metrics": {
-        "cpu_usage": "45%",
-        "memory_usage": "2.3GB",
-        "disk_space": "156GB"
-    },
-    "system_metrics": {
-        "cpu_usage": "45%",
-        "memory_usage": "2.3GB",
-        "disk_space": "156GB"
-    },
+    "metrics": {"cpu_usage": "45%", "memory_usage": "2.3GB", "disk_space": "156GB"},
+    "system_metrics": {"cpu_usage": "45%", "memory_usage": "2.3GB", "disk_space": "156GB"},
     "financial_data": [
-        {
-            "name": "Q1 2025",
-            "revenue": 50000.00,
-            "expenses": 35000.00
-        },
-        {
-            "name": "Q2 2025",
-            "revenue": 75000.00,
-            "expenses": 40000.00
-        }
-    ]
+        {"name": "Q1 2025", "revenue": 50000.00, "expenses": 35000.00},
+        {"name": "Q2 2025", "revenue": 75000.00, "expenses": 40000.00},
+    ],
 }
