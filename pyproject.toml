@@ -81,12 +81,19 @@ target-version = "py312"
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
 select = ["E", "F", "I", "N", "W", "B", "C4", "UP", "RUF", "PL"]
 
-# Allow up to 9 parameters in function definitions
-extend-select = ["PLR0913"]
-ignore = ["PLR0913"]
-
-# Allow magic numbers in tests, implicit Optional in type hints, and unnecessary assignment before return
-extend-ignore = ["PLR2004", "RUF013", "RET504", "UP035", "UP006", "N817", "UP007", "B904"]
+# Suppress specific rules
+ignore = [
+    "PLR0913",  # Too many arguments to function call
+    "PLR2004",  # Magic numbers in tests
+    "RUF013",   # Implicit Optional in type hints
+    "RET504",   # Unnecessary assignment before return
+    "UP035",    # Unnecessary assignment before return
+    "UP006",    # Use tuple instead of list for static values
+    "N817",     # Camelcase imported as lowercase
+    "UP007",    # Use X | Y for union types
+    "B904",     # Use 'raise from' instead of bare raise
+    "PLR0911",  # Too many return statements (max 8)
+]
 
 [tool.ruff.lint.isort]
 known-first-party = ["templify"]
