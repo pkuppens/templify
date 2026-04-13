@@ -1,0 +1,12 @@
+/* Minimal synthetic CV data (Dutch keys) — mirrors cv_minimal.yaml */
+{
+  schema_version: "0.1",
+  personalia: {
+    naam: "Jan de Vries",
+    adres: "1234 AB Utrecht",
+    // Optioneel: meerdere items
+    telefoon: ["+31 6 12345678"],
+    email: ["jan.devries@voorbeeld.nl"],
+    linkedin: "https://linkedin.com/in/example",
+  },
+}

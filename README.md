@@ -208,6 +208,10 @@ result = render_data(template, context, handle_missing=MissingKeyHandling.DEFAUL
 result = render_data("{complex_object}", context)
 ```
 
+## CV resume PoC (preview)
+
+End-to-end demo (Word template + JSON5/YAML data + markdown validation report) is tracked in GitHub epic [#7](https://github.com/pkuppens/templify/issues/7). Documentation lives under [`docs/cv_poc/`](docs/cv_poc/); sample data under [`examples/cv_resume_poc/`](examples/cv_resume_poc/).
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
