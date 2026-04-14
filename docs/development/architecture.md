@@ -356,6 +356,10 @@ async def generate_reports(templates, contexts):
 - ruff: Linting
 - mypy: Type checking
 
+## Architecture decisions
+
+Recorded design choices (context, options, consequences) live under [docs/architecture/adr](../architecture/adr/README.md).
+
 ## Testing Strategy
 
 ### 1. Unit Tests
