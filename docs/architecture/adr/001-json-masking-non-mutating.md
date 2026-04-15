@@ -11,6 +11,18 @@ Templify needs a small helper to produce **log-safe** snapshots of nested `dict`
 
 Callers often pass the **same** objects they use for real work (request bodies, template context). If masking **mutated** those objects in place, the running process could lose secrets for later steps, or shared mutable structures could be corrupted in hard-to-reproduce ways. The library must make a clear contract: callers can pass live objects without side effects.
 
+An earlier sketch used mutable holder objects; that made it easy to alter shared state by accident. The chosen API is a **pure function** on plain `dict` / `list` / JSON text instead.
+
+## Behavior for nested dict and list values
+
+The helper walks only **`dict` and `list`** (plus a top-level **`str`** that is valid JSON, handled via parse → walk → serialize):
+
+- **`dict`**: Builds a **new** dict with the same keys. For each key, if its lowercased name is in the configured mask set, the value is replaced by the mask string; otherwise the value is processed recursively. Nested dicts inside lists are masked the same way when the walk reaches them.
+- **`list`**: Builds a **new** list. Each element is processed recursively. List positions are not named, so redaction applies only to **values of keys** in nested dicts, not to “which list index” something sits at.
+- **Other values** (including **`tuple`**, numbers, strings that are not handled as JSON at the top level, and arbitrary objects): returned **unchanged** by reference—there is no deep walk through tuples or custom types.
+
+So typical nested payloads (`dict` of `dict`s, `list` of `dict`s) are fully covered; tuples and non-JSON structures are not recursively traversed.
+
 ## Decision drivers
 
 - **Correctness**: No accidental removal of secrets from live application state.
