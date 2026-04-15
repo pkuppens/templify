@@ -16,6 +16,10 @@ on:
 permissions:
   contents: write
 
+# Opt in to Node.js 24 for JS-based actions (see GitHub Actions runner changelog).
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 # Workflow jobs
 jobs:
   # Base job that installs dependencies and sets up the environment
@@ -140,7 +144,7 @@ jobs:
 
       # Set up Docker Buildx for improved build performance
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
         run: docker build -t templify .
