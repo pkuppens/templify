@@ -1,3 +1,38 @@
+[project]
+name = "templify"
+version = "0.1.0"
+description = "A powerful templating library that supports multiple template formats and data structures"
+readme = "README.md"
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "jmespath>=0.10.0,<0.11",
+    "jinja2>=3.1.3",
+    "reportlab>=4.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "mkdocs>=1.5.3,<2",
+    "mkdocs-material>=9.5.3,<10",
+    "mkdocs-minify-plugin>=0.7.1,<0.9",
+    "mkdocs-git-revision-date-localized-plugin>=1.2.0,<2",
+    "mkdocs-macros-plugin>=1.0.4,<2",
+    "mkdocs-pdf-export-plugin>=0.5.10,<0.6",
+    "mkdocs-redirects>=1.2.1,<2",
+    "mkdocs-awesome-pages-plugin>=2.9.2,<3",
+    "mkdocs-jupyter>=0.24.1,<0.25",
+    "pymdown-extensions>=10.7,<11",
+    "deptry>=0.12.0,<0.13",
+    "pre-commit>=3.5.0,<4",
+    "pytest>=7.4.3,<8",
+    "pytest-cov>=4.1.0,<5",
+    "ruff>=0.1.6,<0.2",
+    "mypy>=1.7.1,<2",
+    "pytest-mock>=3.12.0,<4",
+    "pytest-xdist>=3.3.1,<4",
+    "jsonschema>=4.20.0,<5",
+]
+
 [tool.poetry]
 name = "templify"
 version = "0.1.0"
