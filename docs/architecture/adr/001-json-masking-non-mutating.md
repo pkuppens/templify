@@ -19,7 +19,7 @@ The helper walks only **`dict` and `list`** (plus a top-level **`str`** that is 
 
 - **`dict`**: Builds a **new** dict with the same keys. For each key, if its lowercased name is in the configured mask set, the value is replaced by the mask string; otherwise the value is processed recursively. Nested dicts inside lists are masked the same way when the walk reaches them.
 - **`list`**: Builds a **new** list. Each element is processed recursively. List positions are not named, so redaction applies only to **values of keys** in nested dicts, not to “which list index” something sits at.
-- **Other values** (including **`tuple`**, numbers, strings that are not handled as JSON at the top level, and arbitrary objects): returned **unchanged** by reference—there is no deep walk through tuples or custom types.
+- **Other values** (including **`tuple`**, numbers, string values nested inside dicts/lists, and arbitrary objects): returned **unchanged** by reference—there is no deep walk through tuples or custom types. Only a **top-level** string is parsed as JSON when it is valid JSON; string leaves in nested structures are not re-parsed.
 
 So typical nested payloads (`dict` of `dict`s, `list` of `dict`s) are fully covered; tuples and non-JSON structures are not recursively traversed.
 
