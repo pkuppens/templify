@@ -16,6 +16,10 @@ on:
 permissions:
   contents: write
 
+# Opt in to Node.js 24 for JS-based actions (see GitHub Actions runner changelog).
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 # Workflow jobs
 jobs:
   # Base job that installs dependencies and sets up the environment
@@ -23,10 +27,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # Updated from v2 for improved security and features
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4  # Updated from v2 for better Python 3.12 support
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'  # Enable pip caching to speed up subsequent runs
@@ -45,7 +49,7 @@ jobs:
 
       # Cache the virtual environment to make it available to other jobs
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/pip
@@ -62,11 +66,11 @@ jobs:
     steps:
       # Re-checkout code since jobs run on different runners
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Restore Python setup
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
@@ -79,7 +83,7 @@ jobs:
 
       # Restore cached dependencies
       - name: Restore cached dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/pip
@@ -101,10 +105,10 @@ jobs:
     steps:
       # Same setup as code-quality job
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
@@ -115,7 +119,7 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Restore cached dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/pip
@@ -136,11 +140,11 @@ jobs:
     steps:
       # Minimal setup for Docker build
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Set up Docker Buildx for improved build performance
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
         run: docker build -t templify .
@@ -156,10 +160,10 @@ jobs:
     if: github.event_name == 'release'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
