@@ -358,7 +358,7 @@ async def generate_reports(templates, contexts):
 
 ## Architecture decisions
 
-Recorded design choices (context, options, consequences) live under [docs/architecture/adr](../architecture/adr/README.md).
+Recorded design choices (context, options, consequences) live under [docs/architecture/adr](../architecture/adr/README.md). Rules for writing and maintaining ADRs (naming, sections, status, superseding accepted records) are in [Authoring guidelines](../architecture/adr/README.md#authoring-guidelines).
 
 ## Testing Strategy
 
