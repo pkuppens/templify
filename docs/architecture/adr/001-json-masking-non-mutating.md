@@ -3,7 +3,7 @@
 **Status**: Accepted
 **Date**: 2026-04-14
 **Deciders**: Project maintainers
-**Related**: [`src/templify/utils.py`](../../../src/templify/utils.py) (`mask_value_for_keys`), [issue #6](https://github.com/pkuppens/templify/issues/6)
+**Related**: [`src/templify/utils.py`](https://github.com/pkuppens/templify/blob/main/src/templify/utils.py) (`mask_value_for_keys`), [issue #6](https://github.com/pkuppens/templify/issues/6)
 
 ## Context and problem statement
 
