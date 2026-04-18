@@ -6,7 +6,7 @@ This note compares **templating stacks** for structured documents—not Word eng
 
 ## Templify (this repo)
 
-**Relevant APIs:** `render_data`, `render_text`, `render_jinja2`, `MissingKeyHandling` in [`src/templify/core.py`](../../src/templify/core.py).
+**Relevant APIs:** `render_data`, `render_text`, `render_jinja2`, `MissingKeyHandling` in [`src/templify/core.py`](https://github.com/pkuppens/templify/blob/main/src/templify/core.py).
 
 | Strength | Notes |
 |----------|--------|
@@ -19,10 +19,10 @@ This note compares **templating stacks** for structured documents—not Word eng
 
 | Area | Detail |
 |------|--------|
-| **CLI** | [`src/templify/cli.py`](../../src/templify/cli.py) exposes `render` / `validate` but does **not** implement them (stub). |
+| **CLI** | [`src/templify/cli.py`](https://github.com/pkuppens/templify/blob/main/src/templify/cli.py) exposes `render` / `validate` but does **not** implement them (stub). |
 | **DOCX** | No first-class `.docx` pipeline; CV PoC will add integration (python-docx / docxtpl / etc.) **alongside** templify for merge logic. |
 | **PDF** | `render_pdf` expects XML-ish structure after `render_data`, then only `<text>` tags become ReportLab `Paragraph`s—**narrow** layout model, not a general Word replacement. |
-| **“Single `render` router”** | [`docs/development/architecture.md`](../../docs/development/architecture.md) describes a unified `render()`; the **exported** API remains separate functions (`render_data`, `render_jinja2`, …). |
+| **“Single `render` router”** | [`docs/development/architecture.md`](../development/architecture.md) describes a unified `render()`; the **exported** API remains separate functions (`render_data`, `render_jinja2`, …). |
 
 ## Jinja2-only
 
