@@ -107,9 +107,7 @@ def mask_value_for_keys(
         original string if it is not valid JSON.
     """
 
-    normalized_keys: frozenset[str] = (
-        frozenset(k.lower() for k in mask_keys) if mask_keys is not None else DEFAULT_MASK_KEYS
-    )
+    normalized_keys: frozenset[str] = frozenset(k.lower() for k in mask_keys) if mask_keys is not None else DEFAULT_MASK_KEYS
 
     def _mask(obj: Any) -> Any:
         if isinstance(obj, dict):

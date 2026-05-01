@@ -1,5 +1,10 @@
 site_name: Templify
 site_description: A powerful templating library that supports multiple template formats and data structures
+
+# Pages used as theme static templates only; omit from sidebar (strict nav check).
+not_in_nav: |
+  theme/404.md
+
 theme:
   name: material
   features:
@@ -59,7 +64,14 @@ nav:
   - Development:
     - Contributing: development/contributing.md
     - Architecture: development/architecture.md
+    - "Architecture decisions":
+        - Overview: architecture/adr/README.md
+        - "ADR-001 JSON masking": architecture/adr/001-json-masking-non-mutating.md
     - GitHub Pages: development/GITHUB_PAGES.md
+  - CV PoC:
+    - Alternatives to Templify: cv_poc/alternatives-to-templify.md
+    - Data model: cv_poc/data_model.md
+    - Validation runbook: cv_poc/validation.md
   - Reference:
     - Requirements: reference/requirements.md
     - Implementation Plan: IMPLEMENTATION_PLAN.md

@@ -37,10 +37,15 @@ repos:
     hooks:
       - id: mkdocs-build
         name: MkDocs Build
-        entry: poetry run mkdocs build --strict
+        entry: mkdocs build --strict
         language: python
         language_version: python3.11
         types: [markdown, yaml]
         pass_filenames: false
         always_run: true
-        additional_dependencies: ['poetry>=1.7.1', 'mkdocs>=1.5.0', 'mkdocs-material>=9.0.0']
+        additional_dependencies:
+          - mkdocs>=1.5.0
+          - mkdocs-material>=9.0.0
+          - mkdocs-minify-plugin>=0.7.0
+          - mkdocs-git-revision-date-localized-plugin>=1.2.0
+          - pymdown-extensions>=10.0
