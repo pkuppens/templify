@@ -19,7 +19,8 @@ from templify.core import MissingKeyHandling, render_data
 
 def get_template_variables(template_path: Path) -> set[str]:
     """Root variable names the ``.docx`` template references (docxtpl introspection)."""
-    return DocxTemplate(str(template_path)).get_undeclared_template_variables()
+    variables: set[str] = DocxTemplate(str(template_path)).get_undeclared_template_variables()
+    return variables
 
 
 def render_docx(
