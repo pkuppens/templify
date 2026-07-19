@@ -9,9 +9,9 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-import yaml
 
 pytest.importorskip("docxtpl")
+yaml = pytest.importorskip("yaml")
 
 pytestmark = pytest.mark.slow
 

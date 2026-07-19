@@ -131,6 +131,9 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction --no-ansi
 
+      - name: Install cv_poc optional dependencies
+        run: poetry run pip install -r examples/cv_resume_poc/requirements-extra.txt
+
       - name: Run tests
         run: poetry run pytest
 
