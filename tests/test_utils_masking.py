@@ -72,3 +72,34 @@ class TestMaskValueForKeys:
         """Package export matches utils module."""
         d = {"password": "s"}
         assert mask_value_for_keys(d) == mask_value_for_keys_direct(d)
+
+    def test_tuple_value_passes_through_unmasked(self) -> None:
+        """ADR-001: tuples are not deep-walked, even for sensitive keys.
+
+        A tuple value is returned unchanged by reference; it is not converted
+        to a list nor are its contents inspected for maskable dicts.
+        """
+        inner = ({"password": "secret"},)
+        data = {"password": "top", "history": inner}
+
+        masked = mask_value_for_keys(data)
+
+        assert masked["password"] == "*****"
+        assert masked["history"] is inner
+        assert masked["history"][0]["password"] == "secret"
+
+    def test_nested_json_string_not_parsed_or_masked(self) -> None:
+        """ADR-001: only a top-level string is parsed as JSON.
+
+        A JSON-text value nested inside a dict/list is a plain string leaf to
+        the walker and is returned unchanged, even though it contains a
+        maskable key if parsed.
+        """
+        nested_json = '{"password": "secret"}'
+        data = {"password": "top", "payload": nested_json, "items": [nested_json]}
+
+        masked = mask_value_for_keys(data)
+
+        assert masked["password"] == "*****"
+        assert masked["payload"] == nested_json
+        assert masked["items"] == [nested_json]
