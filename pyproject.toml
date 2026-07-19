@@ -162,6 +162,7 @@ minversion = "6.0"
 addopts = "-ra -q --cov=templify --cov-report=term-missing"
 testpaths = [
     "tests",
+    "examples/cv_resume_poc/tests",
 ]
 filterwarnings = [
     "ignore::DeprecationWarning",
