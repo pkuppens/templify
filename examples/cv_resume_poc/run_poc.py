@@ -39,11 +39,13 @@ def load_data(data_path: Path) -> dict[str, Any]:
         if suffix in (".yaml", ".yml"):
             import yaml
 
-            return yaml.safe_load(text) or {}
+            loaded: dict[str, Any] = yaml.safe_load(text) or {}
+            return loaded
         if suffix in (".json5", ".json"):
             import json5
 
-            return json5.loads(text)
+            parsed: dict[str, Any] = json5.loads(text)
+            return parsed
     except Exception as exc:
         raise ValueError(f"Could not parse {data_path} as {suffix}: {exc}") from exc
 
