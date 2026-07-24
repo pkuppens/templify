@@ -1,6 +1,6 @@
 [project]
 name = "templify"
-version = "0.1.0"
+version = "0.2.0"
 description = "A powerful templating library that supports multiple template formats and data structures"
 readme = "README.md"
 license = "MIT"
@@ -60,6 +60,16 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/templify"]
+
+[tool.hatch.build.targets.sdist]
+# Scope the sdist explicitly instead of globbing the whole project tree —
+# avoids picking up local-only clutter (.codegraph/, .venv/, dist/, etc.)
+# that doesn't exist in a fresh checkout.
+include = [
+    "src/templify",
+    "README.md",
+    "LICENSE",
+]
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.

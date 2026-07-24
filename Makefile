@@ -47,6 +47,18 @@ docs-test: ## Test if documentation can be built without warnings or errors
 docs: ## Build and serve the documentation
 	@uv run mkdocs serve
 
+.PHONY: ci-local
+ci-local: ## Reproduce the CI "setup"/"code-quality"/"test" jobs locally, verbatim
+	@echo "🚀 Reproducing CI: uv sync (setup job)"
+	@uv sync --group dev --extra cv-poc
+	@echo "🚀 Reproducing CI: ruff (code-quality job)"
+	@uv run ruff check .
+	@echo "🚀 Reproducing CI: pytest (test job)"
+	@uv run pytest
+	@echo "🚀 Reproducing CI: uv build (deploy job)"
+	@uv build
+	@rm -rf dist
+
 .PHONY: help
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
