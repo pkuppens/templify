@@ -16,7 +16,7 @@ Confirm in GitHub: **Repository → Settings → Pages** (custom domain override
 
 Workflow file: [`.github/workflows/docs.yml`](https://github.com/pkuppens/templify/blob/main/.github/workflows/docs.yml).
 
-- **Automatic:** push to **`main`** that changes `docs/**`, `mkdocs.yml`, `pyproject.toml`, `poetry.lock`, or `.github/workflows/docs.yml`.
+- **Automatic:** push to **`main`** that changes `docs/**`, `mkdocs.yml`, `pyproject.toml`, `uv.lock`, or `.github/workflows/docs.yml`.
 - **Manual:** **Actions → Documentation → Run workflow** (`workflow_dispatch`). Choose the branch to build from when you run it.
 
 Production deploy uses the **`github-pages`** Pages environment.
@@ -28,7 +28,7 @@ Install development dependencies (see [`pyproject.toml`](https://github.com/pkup
 - **Serve:** `mkdocs serve` — live reload while editing.
 - **Build:** `mkdocs build --strict` — writes static files to **`site/`** (same layout CI deploys).
 
-CI currently uses Poetry (`poetry install --with dev` and `poetry run mkdocs build --strict`). Locally you can use the same or your usual tool (for example `uv`) as long as MkDocs and plugins from `pyproject.toml` are installed.
+CI uses uv (`uv sync --group dev` and `uv run mkdocs build --strict`). Locally, use `uv run mkdocs ...` — never `poetry` or bare `pip install` — as long as MkDocs and plugins from `pyproject.toml` are installed.
 
 ## Source vs generated output
 

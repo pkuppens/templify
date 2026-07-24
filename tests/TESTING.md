@@ -4,47 +4,44 @@ This document describes how to run tests for the Templify project.
 
 ## Prerequisites
 
-- Python 3.12 or higher
-- Poetry for dependency management
+- Python 3.11-3.14 (3.13/3.14 fully tested)
+- uv for dependency management (never `poetry` or bare `pip install`)
 - pytest for test execution
 
 ## Setup
 
 1. Install development dependencies:
    ```bash
-   poetry install
+   uv sync --group dev
    ```
 
-2. Activate the virtual environment:
-   ```bash
-   poetry shell
-   ```
+2. Run commands inside the environment with `uv run <command>`.
 
 ## Running Tests
 
 ### Run all tests
 
 ```bash
-pytest
+uv run pytest
 ```
 
 ### Run specific test files
 
 ```bash
-pytest tests/test_core.py
-pytest tests/test_utils.py
+uv run pytest tests/test_core.py
+uv run pytest tests/test_utils.py
 ```
 
 ### Run tests with coverage report
 
 ```bash
-pytest --cov=templify
+uv run pytest --cov=templify
 ```
 
 ### Run tests with verbose output
 
 ```bash
-pytest -v
+uv run pytest -v
 ```
 
 ## Test Structure

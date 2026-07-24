@@ -4,10 +4,13 @@ This guide will help you set up your development environment for Templify.
 
 ## Prerequisites
 
-### Python 3.12+
+### Python 3.13+
+
+Templify supports Python 3.11-3.14; 3.13 and 3.14 are the primary, fully-tested
+versions. Use the newest of those for local development.
 
 #### Windows
-1. Download Python 3.12 from the [official Python website](https://www.python.org/downloads/)
+1. Download Python 3.13 from the [official Python website](https://www.python.org/downloads/)
 2. Run the installer
 3. Make sure to check "Add Python to PATH" during installation
 4. Verify installation:
@@ -19,36 +22,33 @@ This guide will help you set up your development environment for Templify.
 ```bash
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
-sudo apt install python3.12 python3.12-venv
+sudo apt install python3.13 python3.13-venv
 ```
 
 #### macOS
 ```bash
-brew install python@3.12
+brew install python@3.13
 ```
 
-### Poetry
+### uv
+
+Templify uses [uv](https://docs.astral.sh/uv/) for package management — never `poetry` or bare `pip install`.
 
 #### Windows
 ```bash
-winget install poetry
+winget install astral-sh.uv
 ```
 
-#### Ubuntu/Debian
+#### Ubuntu/Debian and macOS
 ```bash
-curl -sSL https://install.python-poetry.org | python3 -
-```
-
-#### macOS
-```bash
-curl -sSL https://install.python-poetry.org | python3 -
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 ### Verify Installation
 
 ```bash
-python --version  # Should show Python 3.12.x
-poetry --version  # Should show Poetry version 1.8.3 or higher
+python --version  # Should show Python 3.13.x (or 3.14.x)
+uv --version       # Should show a recent uv version
 ```
 
 ## Project Setup
@@ -61,13 +61,11 @@ poetry --version  # Should show Poetry version 1.8.3 or higher
 
 2. Install dependencies:
    ```bash
-   poetry install
+   uv sync --group dev
    ```
 
-3. Activate the virtual environment:
-   ```bash
-   poetry shell
-   ```
+3. Run commands inside the environment with `uv run <command>` (e.g. `uv run pytest`), or activate
+   the `.venv` uv creates in-project.
 
 ## Development Workflow
 
@@ -75,32 +73,32 @@ poetry --version  # Should show Poetry version 1.8.3 or higher
 
 ```bash
 # Run all tests
-pytest
+uv run pytest
 
 # Run tests with coverage
-pytest --cov=templify
+uv run pytest --cov=templify
 
 # Run specific test file
-pytest tests/test_core.py
+uv run pytest tests/test_core.py
 ```
 
 ### Code Quality
 
 The project uses several tools to maintain code quality:
 
-- `ruff` for linting - replaces flake8, isort, and black
+- `ruff` for linting and formatting - replaces flake8, isort, and black
 - `mypy` for type checking
 
 Run all checks:
 ```bash
-# Format code
-black .
-
 # Run linter
-ruff check .
+uv run ruff check .
+
+# Format code
+uv run ruff format .
 
 # Type checking
-mypy .
+uv run mypy
 ```
 
 ### Project Structure
@@ -125,29 +123,29 @@ templify/
 
 ### Windows-specific
 
-1. If `poetry` command is not found after installation:
-   - Add Poetry to PATH: `%APPDATA%\Python\Scripts`
+1. If `uv` command is not found after installation:
+   - Add uv to PATH: `%USERPROFILE%\.local\bin`
    - Restart your terminal
 
-2. If Python 3.12 is not found:
+2. If Python 3.13 is not found:
    - Verify Python installation in System Settings > Apps
    - Check PATH environment variable
 
 ### Unix/macOS-specific
 
-1. If Poetry installation fails:
+1. If the uv installer fails:
    ```bash
    # Try installing with pip
-   pip install poetry
+   pip install uv
    ```
 
-2. If Python 3.12 is not found:
+2. If Python 3.13 is not found:
    ```bash
    # On Ubuntu/Debian
-   sudo apt install python3.12-venv
+   sudo apt install python3.13-venv
 
    # On macOS
-   brew link python@3.12
+   brew link python@3.13
    ```
 
 ## Getting Help

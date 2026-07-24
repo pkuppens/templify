@@ -1,7 +1,0 @@
-# Optional dependencies for the CV PoC's Word-document rendering (issue #11).
-# Not part of templify's own package metadata (pyproject.toml) — install
-# separately when running the DOCX rendering path or its tests:
-#   pip install -r examples/cv_resume_poc/requirements-extra.txt
-docxtpl>=0.16,<0.17
-PyYAML>=6.0,<7
-json5>=0.9,<1

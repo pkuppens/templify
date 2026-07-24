@@ -517,7 +517,7 @@ def format_currency(value: float) -> str:
 #### 6.1 Platform Support
 **Purpose**: Ensure cross-platform compatibility
 **Requirements**:
-- Python 3.12+
+- Python 3.11-3.14 (3.13/3.14 fully tested)
 - Windows support
 - Linux support
 - macOS support
@@ -534,22 +534,26 @@ template = template.replace("\r\n", "\n")
 #### 6.2 Dependency Management
 **Purpose**: Manage project dependencies
 **Requirements**:
-- Poetry for dependency management
+- uv for dependency management (never `poetry` or bare `pip install`)
 - Clear dependency specifications
 - Version compatibility
 - Dependency updates
 
 **Example Dependency Management**:
 ```toml
-[tool.poetry.dependencies]
-python = "^3.12"
-jinja2 = "^3.1.0"
-jmespath = "^0.10.0"
+[project]
+requires-python = ">=3.11,<4.0"
+dependencies = [
+    "jinja2>=3.1.3",
+    "jmespath>=0.10.0,<0.11",
+]
 
-[tool.poetry.dev-dependencies]
-pytest = "^7.4.0"
-ruff = "^0.1.0"
-mypy = "^1.5.0"
+[dependency-groups]
+dev = [
+    "pytest>=7.4.3,<8",
+    "ruff>=0.1.6,<0.2",
+    "mypy>=1.7.1,<2",
+]
 ```
 
 ## Development Requirements
@@ -794,7 +798,7 @@ with PerformanceMonitor() as monitor:
 ## Dependencies
 
 ### 1. Core Dependencies
-- Python 3.12+
+- Python 3.11-3.14 (3.13/3.14 fully tested)
 - Jinja2: Template engine
 - JMESPath: Data querying
 - typing: Type hints
