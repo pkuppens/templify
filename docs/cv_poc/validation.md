@@ -9,7 +9,7 @@ sections.
 ## Preconditions
 
 - [ ] Repository synced; optional CV dependencies installed:
-      `pip install -r examples/cv_resume_poc/requirements-extra.txt`.
+      `uv sync --extra cv-poc`.
 - [ ] Sample data: `examples/cv_resume_poc/data/cv_minimal.yaml` and `cv_minimal.json5`.
 - [ ] Template: `examples/cv_resume_poc/template/cv_template.docx`.
 

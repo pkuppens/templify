@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-- Python 3.12+
-- Poetry
+- Python 3.13+ (3.11-3.14 supported; 3.13/3.14 are fully tested)
+- [uv](https://docs.astral.sh/uv/) — never `poetry` or bare `pip install`
 
 ## Installation Steps
 
@@ -13,26 +13,26 @@
     cd templify
     ```
 
-2. Install dependencies using Poetry:
+2. Install dependencies using uv:
     ```sh
-    poetry install
+    uv sync --group dev
     ```
 
-3. Set up the virtual environment:
+3. Run commands inside the environment:
     ```sh
-    poetry shell
+    uv run <command>
     ```
 
 ## Running the Project
 
 1. Run the project locally:
     ```sh
-    python -m templify
+    uv run python -m templify
     ```
 
 2. Run tests using `pytest`:
     ```sh
-    pytest
+    uv run pytest
     ```
 
 ## Docker Setup

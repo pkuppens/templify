@@ -1,10 +1,10 @@
-# Use a slim Python 3.12 base image
-FROM python:3.12-slim
+# Use a slim Python 3.13 base image
+FROM python:3.13-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies for Poetry and typical dev needs
+# Install system dependencies for uv and typical dev needs
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         bash \
@@ -18,17 +18,16 @@ RUN apt-get update && \
 # Add non-root user 'templify'
 RUN useradd -ms /bin/bash templify
 
-# Install Poetry using pip and add to PATH
+# Install uv using pip and add to PATH
 RUN pip install --upgrade pip && \
-    pip install poetry && \
-    ln -s /usr/local/bin/poetry /usr/bin/poetry
+    pip install uv && \
+    ln -s /usr/local/bin/uv /usr/bin/uv
 
-# Copy all project files first (needed for poetry install)
+# Copy all project files first (needed for uv sync)
 COPY . .
 
 # Install all dependencies and create virtual environment
-RUN poetry config virtualenvs.create true && \
-    poetry install
+RUN uv sync --group dev
 
 # Fix permissions so 'templify' user owns project files
 RUN chown -R templify:templify /app

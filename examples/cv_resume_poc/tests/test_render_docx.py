@@ -1,8 +1,8 @@
 """DOCX rendering smoke test (issue #11 / #13).
 
 Marked slow and skipped when docxtpl is not installed, so core CI does not
-require the optional Word-rendering dependency
-(``examples/cv_resume_poc/requirements-extra.txt``).
+require the optional Word-rendering dependency (the ``cv-poc`` extra in
+``pyproject.toml``, installed via ``uv sync --extra cv-poc``).
 """
 from __future__ import annotations
 

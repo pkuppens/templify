@@ -212,6 +212,12 @@ result = render_data("{complex_object}", context)
 
 End-to-end demo (Word template + JSON5/YAML data + markdown validation report) is tracked in GitHub epic [#7](https://github.com/pkuppens/templify/issues/7). Documentation lives under [`docs/cv_poc/`](docs/cv_poc/); sample data under [`examples/cv_resume_poc/`](examples/cv_resume_poc/).
 
+## Development
+
+Templify supports Python 3.11-3.14 (3.13/3.14 are the primary, fully-tested versions) and uses
+[uv](https://docs.astral.sh/uv/) for package management — never `poetry` or bare `pip install`.
+See [DEVELOP.md](DEVELOP.md) for setup instructions.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

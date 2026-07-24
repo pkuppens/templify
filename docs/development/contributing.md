@@ -49,7 +49,8 @@ If you are proposing a new feature:
 # Get Started!
 
 Ready to contribute? Here's how to set up `templify` for local development.
-Please note this documentation assumes you already have `poetry` and `Git` installed and ready to go.
+Please note this documentation assumes you already have `uv` and `Git` installed and ready to go.
+Templify uses [uv](https://docs.astral.sh/uv/) for package management — never `poetry` or bare `pip install`.
 
 1. Fork the `templify` repo on GitHub.
 
@@ -72,17 +73,16 @@ If you are using `pyenv`, select a version to use locally. (See installed versio
 pyenv local <x.y.z>
 ```
 
-Then, install and activate the environment with:
+Then, install the environment with:
 
 ```bash
-poetry install
-poetry shell
+uv sync --group dev
 ```
 
 4. Install pre-commit to run linters/formatters at commit time:
 
 ```bash
-poetry run pre-commit install
+uv run pre-commit install
 ```
 
 5. Create a branch for local development:
@@ -112,7 +112,7 @@ make test
 ```
 
 9. Before raising a pull request you should also run tox.
-   This will run the tests across different versions of Python:
+   This will run the tests across all supported versions of Python (3.11-3.14):
 
 ```bash
 tox

@@ -3,11 +3,32 @@ name = "templify"
 version = "0.1.0"
 description = "A powerful templating library that supports multiple template formats and data structures"
 readme = "README.md"
-requires-python = ">=3.10,<4.0"
+license = "MIT"
+authors = [{name = "Pieter Kuppens", email = "pieter.kuppens@gmail.com"}]
+requires-python = ">=3.11,<4.0"
 dependencies = [
     "jmespath>=0.10.0,<0.11",
     "jinja2>=3.1.3",
     "reportlab>=4.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/pkuppens/templify"
+Repository = "https://github.com/pkuppens/templify"
+Documentation = "https://github.com/pkuppens/templify"
+
+[project.scripts]
+templify = "templify.cli:main"
+
+[project.optional-dependencies]
+# Optional dependencies for the CV PoC's Word-document rendering (issue #11).
+# Not part of templify's own runtime dependencies — install with
+# `uv sync --extra cv-poc` (or `uv pip install .[cv-poc]`) when running the
+# DOCX rendering path or its tests.
+cv-poc = [
+    "docxtpl>=0.16,<0.17",
+    "PyYAML>=6.0,<7",
+    "json5>=0.9,<1",
 ]
 
 [dependency-groups]
@@ -33,48 +54,12 @@ dev = [
     "jsonschema>=4.20.0,<5",
 ]
 
-[tool.poetry]
-name = "templify"
-version = "0.1.0"
-description = "A powerful templating library that supports multiple template formats and data structures"
-authors = ["Pieter Kuppens <pieter.kuppens@gmail.com>"]
-license = "MIT"
-readme = "README.md"
-homepage = "https://github.com/pkuppens/templify"
-repository = "https://github.com/pkuppens/templify"
-documentation = "https://github.com/pkuppens/templify"
-packages = [{include = "templify", from = "src"}]
-
-[tool.poetry.dependencies]
-python = ">=3.10,<4.0"
-jmespath = "^0.10.0"
-jinja2 = "^3.1.3"
-reportlab = "^4.1.0"
-
-[tool.poetry.group.dev.dependencies]
-mkdocs = "^1.5.3"
-mkdocs-material = "^9.5.3"
-mkdocs-minify-plugin = "^0.7.1"
-mkdocs-git-revision-date-localized-plugin = "^1.2.0"
-mkdocs-macros-plugin = "^1.0.4"
-mkdocs-pdf-export-plugin = "^0.5.10"
-mkdocs-redirects = "^1.2.1"
-mkdocs-awesome-pages-plugin = "^2.9.2"
-mkdocs-jupyter = "^0.24.1"
-pymdown-extensions = "^10.7"
-deptry = "^0.12.0"
-pre-commit = "^3.5.0"
-pytest = "^7.4.3"
-pytest-cov = "^4.1.0"
-ruff = "^0.1.6"
-mypy = "^1.7.1"
-pytest-mock = "^3.12.0"
-pytest-xdist = "^3.3.1"
-jsonschema = "^4.20.0"
-
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/templify"]
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
@@ -109,8 +94,8 @@ line-length = 132
 fixable = ["ALL"]
 unfixable = []
 
-# Assume Python 3.12
-target-version = "py312"
+# Assume Python 3.11 (the minimum supported version)
+target-version = "py311"
 
 [tool.ruff.lint]
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
@@ -143,7 +128,7 @@ known-first-party = ["templify"]
 "__init__.py" = ["F401"]
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
@@ -171,6 +156,3 @@ filterwarnings = [
 markers = [
     "slow: exercises optional heavier dependencies (e.g. docxtpl DOCX rendering)",
 ]
-
-[tool.poetry.scripts]
-templify = "templify.cli:main"
